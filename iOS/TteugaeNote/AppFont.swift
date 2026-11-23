@@ -2,14 +2,16 @@ import SwiftUI
 import UIKit
 import CoreText
 
-/// 메모먼트 꾹꾹체 (Fonts/MemomentKkukkukk.ttf)
+/// 온글잎 박다현체 (Fonts/OwnglyphPDH.ttf)
 /// Info.plist 없이 앱이 켜질 때 직접 등록해요.
 enum AppFont {
-    static let name = "MemomentKkukkukkR"
+    static let name = "Ownglyph_PDH-Rg"
+    /// 박다현체는 같은 크기에서 글자가 작게 보여서 조금 키워요
+    static let scale: CGFloat = 1.12
 
     static func register() {
-        let url = Bundle.main.url(forResource: "MemomentKkukkukk", withExtension: "ttf")
-            ?? Bundle.main.url(forResource: "MemomentKkukkukk", withExtension: "ttf", subdirectory: "Fonts")
+        let url = Bundle.main.url(forResource: "OwnglyphPDH", withExtension: "ttf")
+            ?? Bundle.main.url(forResource: "OwnglyphPDH", withExtension: "ttf", subdirectory: "Fonts")
         guard let url else {
             print("폰트 파일을 찾지 못했어요")
             return
@@ -22,9 +24,9 @@ enum AppFont {
 
     /// 내비게이션 제목, 탭 전환 버튼처럼 UIKit이 그리는 글자에도 적용
     static func configureUIKit() {
-        guard let large = UIFont(name: name, size: 34),
-              let title = UIFont(name: name, size: 18),
-              let segment = UIFont(name: name, size: 15) else { return }
+        guard let large = UIFont(name: name, size: 34 * scale),
+              let title = UIFont(name: name, size: 18 * scale),
+              let segment = UIFont(name: name, size: 15 * scale) else { return }
         let nav = UINavigationBar.appearance()
         nav.largeTitleTextAttributes = [.font: large]
         nav.titleTextAttributes = [.font: title]
@@ -52,10 +54,10 @@ enum AppFont {
 extension Font {
     /// 앱 글꼴로 된 텍스트 스타일 (다이내믹 타입 크기 조절도 따라가요)
     static func app(_ style: Font.TextStyle) -> Font {
-        .custom(AppFont.name, size: AppFont.size(for: style), relativeTo: style)
+        .custom(AppFont.name, size: AppFont.size(for: style) * AppFont.scale, relativeTo: style)
     }
 
     static func app(size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font {
-        .custom(AppFont.name, size: size, relativeTo: style)
+        .custom(AppFont.name, size: size * AppFont.scale, relativeTo: style)
     }
 }
