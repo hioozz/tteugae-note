@@ -1,0 +1,14 @@
+{
+  "name": "뜨개노트",
+  "short_name": "뜨개노트",
+  "description": "단수 카운터와 작품 기록을 한곳에서",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f2ec",
+  "theme_color": "#f6f2ec",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

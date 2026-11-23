@@ -1,0 +1,61 @@
+import SwiftUI
+import UIKit
+import CoreText
+
+/// 메모먼트 꾹꾹체 (Fonts/MemomentKkukkukk.ttf)
+/// Info.plist 없이 앱이 켜질 때 직접 등록해요.
+enum AppFont {
+    static let name = "MemomentKkukkukkR"
+
+    static func register() {
+        let url = Bundle.main.url(forResource: "MemomentKkukkukk", withExtension: "ttf")
+            ?? Bundle.main.url(forResource: "MemomentKkukkukk", withExtension: "ttf", subdirectory: "Fonts")
+        guard let url else {
+            print("폰트 파일을 찾지 못했어요")
+            return
+        }
+        var error: Unmanaged<CFError>?
+        if !CTFontManagerRegisterFontsForURL(url as CFURL, .process, &error) {
+            print("폰트 등록 실패: \(String(describing: error?.takeRetainedValue()))")
+        }
+    }
+
+    /// 내비게이션 제목, 탭 전환 버튼처럼 UIKit이 그리는 글자에도 적용
+    static func configureUIKit() {
+        guard let large = UIFont(name: name, size: 34),
+              let title = UIFont(name: name, size: 18),
+              let segment = UIFont(name: name, size: 15) else { return }
+        let nav = UINavigationBar.appearance()
+        nav.largeTitleTextAttributes = [.font: large]
+        nav.titleTextAttributes = [.font: title]
+        UISegmentedControl.appearance().setTitleTextAttributes([.font: segment], for: .normal)
+    }
+
+    static func size(for style: Font.TextStyle) -> CGFloat {
+        switch style {
+        case .largeTitle: return 34
+        case .title: return 28
+        case .title2: return 22
+        case .title3: return 20
+        case .headline: return 17
+        case .body: return 17
+        case .callout: return 16
+        case .subheadline: return 15
+        case .footnote: return 13
+        case .caption: return 12
+        case .caption2: return 11
+        @unknown default: return 17
+        }
+    }
+}
+
+extension Font {
+    /// 앱 글꼴로 된 텍스트 스타일 (다이내믹 타입 크기 조절도 따라가요)
+    static func app(_ style: Font.TextStyle) -> Font {
+        .custom(AppFont.name, size: AppFont.size(for: style), relativeTo: style)
+    }
+
+    static func app(size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font {
+        .custom(AppFont.name, size: size, relativeTo: style)
+    }
+}

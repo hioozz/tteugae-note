@@ -1,0 +1,15 @@
+# 메모먼트 꾹꾹체는 폰트 파일 재배포가 금지라서 저장소에 올리지 않아요 (README 참고)
+*.ttf
+*.otf
+
+# 맥
+.DS_Store
+
+# Xcode 개인 설정·빌드 결과물
+xcuserdata/
+*.xcuserstate
+DerivedData/
+build/
+
+# Claude Code 개인 설정
+.claude/settings.local.json
