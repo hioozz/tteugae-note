@@ -19,7 +19,7 @@ extension Color {
 }
 
 enum Theme {
-    static let bg = Color(light: 0xF6F2EC, dark: 0x1B1613)
+    static let bg = Color(light: 0xFFFFFF, dark: 0x1B1613)
     static let surface = Color(light: 0xFFFFFF, dark: 0x251F1A)
     static let surface2 = Color(light: 0xEFE5D9, dark: 0x322921)
     static let line = Color(light: 0xE5D7C8, dark: 0x3B3129)
