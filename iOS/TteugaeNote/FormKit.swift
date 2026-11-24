@@ -281,3 +281,23 @@ struct InlineActionButton: View {
         .buttonStyle(ChipStyle())
     }
 }
+
+/// 화면 위쪽 오른쪽의 "+ 추가" 버튼 (홈의 '새 작품'과 같은 연분홍)
+struct ToolbarAddButton: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                Image(lucide: "plus")
+                Text(title)
+            }
+            .appFont(.subheadline)
+            .foregroundStyle(Theme.accentInk)
+            .fixedSize()
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(Theme.accent)
+    }
+}

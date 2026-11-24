@@ -28,13 +28,11 @@ struct ProjectListView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            Group {
-                if store.projects.isEmpty { emptyState } else { list }
-            }
+            list
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Theme.bg.ignoresSafeArea())
             .navigationTitle("뜨개노트")
-            .toolbar { toolbarContent }
+            .toolbar(.hidden, for: .navigationBar)   // 웹처럼 화면 안에 머리말을 그려요
             .navigationDestination(for: String.self) { CounterView(projectID: $0) }
             .fileExporter(isPresented: $showExporter,
                           document: exportDoc,
@@ -71,10 +69,7 @@ struct ProjectListView: View {
     private var list: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                let today = store.rowsToday()
-                Text(today > 0 ? "오늘 \(today)단 떴어요" : "오늘도 한 단씩")
-                    .appFont(.subheadline)
-                    .foregroundStyle(Theme.muted)
+                header
                 HStack(spacing: 8) {
                     Button { showLibrary = true } label: { Label("도안함", lucide: "book") }
                     Button { showStash = true } label: { Label("보관함", lucide: "shippingbox") }
@@ -82,67 +77,77 @@ struct ProjectListView: View {
                 }
                 .buttonStyle(ChipStyle())
 
-                if knitting.isEmpty {
+                if store.projects.isEmpty {
+                    EmptyStateView(title: "첫 작품을 시작해 보세요",
+                                   message: "단수를 세고, 반복 작업을 알려주고,\n실과 바늘 정보도 함께 기억해 둘게요.",
+                                   buttonTitle: "새 작품 만들기",
+                                   action: { showNew = true })
+                        .padding(.top, 40)
+                } else if knitting.isEmpty {
                     EmptyStateView(title: "지금 뜨는 작품이 없어요",
                                    message: "새 작품을 시작하거나\n도안함에 저장해 둔 도안으로 바로 시작해 보세요.",
                                    buttonTitle: "새 작품 만들기",
-                                   action: { showNew = true },
-                                   secondary: done.isEmpty ? nil : AnyView(
-                                    Button { showDone = true } label: { Label("완성한 작품 보기", lucide: "checkmark.seal") }
-                                        .buttonStyle(ChipStyle())
-                                   ))
-                        .padding(.top, 50)
+                                   action: { showNew = true })
+                        .padding(.top, 40)
                 } else {
                     ForEach(knitting) { p in
                         NavigationLink(value: p.id) { ProjectCard(project: p) }
                             .buttonStyle(.plain)
                     }
                 }
+
+                footer.padding(.top, 24)
             }
             .padding(16)
         }
     }
 
-    private var emptyState: some View {
-        EmptyStateView(title: "첫 작품을 시작해 보세요",
-                       message: "단수를 세고, 반복 작업을 알려주고,\n실과 바늘 정보도 함께 기억해 둘게요.",
-                       buttonTitle: "새 작품 만들기",
-                       action: { showNew = true })
+    /// 로고 + 제목 + 오늘 뜬 단 + 새 작품 버튼 (웹과 같은 모양)
+    private var header: some View {
+        HStack(spacing: 12) {
+            Image("YarnLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 44, height: 44)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("뜨개노트").appFont(size: 26, relativeTo: .title)
+                let today = store.rowsToday()
+                Text(today > 0 ? "오늘 \(today)단 떴어요" : "오늘도 한 단씩")
+                    .appFont(.subheadline)
+                    .foregroundStyle(Theme.muted)
+            }
+            Spacer(minLength: 8)
+            if !store.projects.isEmpty {
+                Button { showNew = true } label: {
+                    Label("새 작품", lucide: "plus")
+                        .appFont(.subheadline)
+                        .padding(.horizontal, 14)
+                        .frame(height: 40)
+                }
+                .buttonStyle(PressStyle(bg: Theme.accent, fg: Theme.accentInk, radius: 20))
+            }
+        }
+        .padding(.top, 8)
+        .padding(.bottom, 4)
     }
 
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            Menu {
-                Button {
-                    exportDoc = BackupDocument(data: store.exportData())
-                    showExporter = true
-                } label: { Label("백업 내보내기", lucide: "square.and.arrow.up") }
-                Button { showImporter = true } label: {
-                    Label("백업 가져오기", lucide: "square.and.arrow.down")
-                }
-                Divider()
-                Button { showSettings = true } label: { Label("설정", lucide: "gearshape") }
-            } label: {
-                Image(lucide: "gearshape")
-            }
-            .accessibilityLabel("설정과 백업")
+    /// 화면 맨 아래 글자 링크: 백업·설정
+    private var footer: some View {
+        HStack(spacing: 10) {
+            Button {
+                exportDoc = BackupDocument(data: store.exportData())
+                showExporter = true
+            } label: { Text("백업 내보내기").underline() }
+            Text("·").accessibilityHidden(true)
+            Button { showImporter = true } label: { Text("백업 가져오기").underline() }
+            Text("·").accessibilityHidden(true)
+            Button { showSettings = true } label: { Text("설정").underline() }
         }
-        if !store.projects.isEmpty {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button { showNew = true } label: {
-                    HStack(spacing: 4) {
-                        Image(lucide: "plus")
-                        Text("새 작품")
-                    }
-                    .appFont(.subheadline)
-                    .foregroundStyle(Theme.accentInk)
-                    .fixedSize()
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(Theme.accent)
-            }
-        }
+        .buttonStyle(.plain)
+        .appFont(.footnote)
+        .foregroundStyle(Theme.muted)
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: 동작

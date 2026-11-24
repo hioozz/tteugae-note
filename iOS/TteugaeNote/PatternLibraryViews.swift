@@ -34,8 +34,10 @@ struct PatternLibraryView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("닫기") { dismiss() } }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button { editing = SavedPattern() } label: { Label("도안 추가", lucide: "plus") }
+                if !store.patterns.isEmpty {   // 비었을 땐 가운데 큰 버튼만
+                    ToolbarItem(placement: .topBarTrailing) {
+                        ToolbarAddButton(title: "도안 추가") { editing = SavedPattern() }
+                    }
                 }
             }
             .sheet(item: $editing) { SavedPatternSheet(pattern: $0, onStart: { start($0) }) }
@@ -46,8 +48,8 @@ struct PatternLibraryView: View {
     private var emptyState: some View {
         EmptyStateView(title: "아직 저장한 도안이 없어요",
                        message: "자주 뜨는 도안을 넣어 두면\n도안 파일, 단별 안내, 실·바늘까지 담긴 채로\n바로 작품을 시작할 수 있어요.",
-                       note: "뜨던 작품의 도안 메뉴에서 ‘도안함에 저장’으로도 넣을 수 있어요.",
-                       buttonTitle: "도안 추가") { editing = SavedPattern() }
+                       buttonTitle: "도안 추가",
+                       art: "EmptyPatterns") { editing = SavedPattern() }
     }
 
     private func start(_ sp: SavedPattern) {

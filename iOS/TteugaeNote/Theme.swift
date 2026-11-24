@@ -237,12 +237,22 @@ struct EmptyStateView: View {
     var note: String = ""
     var buttonTitle: String? = nil
     var buttonIcon: String = "plus"
+    /// 멈춘 그림을 쓰고 싶을 때 에셋 이름 (없으면 뜨개질하는 고양이)
+    var art: String? = nil
     var action: (() -> Void)? = nil
     var secondary: AnyView? = nil
 
     var body: some View {
         VStack(spacing: 14) {
-            KnittingCatAnimation(size: 150)
+            if let art {
+                Image(art)
+                    .interpolation(.none)   // 픽셀이 번지지 않게
+                    .resizable()
+                    .frame(width: 150, height: 150)
+                    .accessibilityHidden(true)
+            } else {
+                KnittingCatAnimation(size: 150)
+            }
             Text(title)
                 .appFont(.title3)
                 .foregroundStyle(Theme.text)

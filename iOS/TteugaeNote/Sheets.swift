@@ -278,19 +278,19 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             AppForm {
-                FormSection(footer: "작품 기록은 이 아이폰에 저장되고 아이폰 iCloud 백업에도 포함돼요. 다른 기기로 옮길 땐 ‘백업 내보내기’를 쓰세요.") {
-                    ToggleRow(title: "진동", isOn: $haptics)
+                FormSection {
+                    ToggleRow(title: "진동", detail: "단을 셀 때 짧게 진동해요", isOn: $haptics)
                     FormDivider()
-                    ToggleRow(title: "카운터 화면 켜두기", isOn: $keepAwake)
+                    ToggleRow(title: "화면 켜두기", detail: "카운터 화면에서는 화면이 꺼지지 않아요", isOn: $keepAwake)
                 }
-                FormSection(title: "정보") {
-                    HStack {
-                        Text("버전").appFont(.body)
-                        Spacer()
-                        Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
-                            .appFont(.body).foregroundStyle(Theme.muted)
-                    }
-                }
+                Text("작품 기록은 이 아이폰에 저장되고 아이폰 iCloud 백업에도 포함돼요. 다른 기기로 옮길 땐 홈 화면 맨 아래 ‘백업 내보내기’를 쓰세요.")
+                    .appFont(.caption)
+                    .foregroundStyle(Theme.muted)
+                    .padding(.horizontal, 4)
+                Text("버전 \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")")
+                    .appFont(.caption)
+                    .foregroundStyle(Theme.muted)
+                    .frame(maxWidth: .infinity)
             }
             .navigationTitle("설정")
             .navigationBarTitleDisplayMode(.inline)
@@ -300,5 +300,7 @@ struct SettingsView: View {
                 }
             }
         }
+        .presentationDetents([.medium])
+        .presentationBackground(Theme.bg)
     }
 }

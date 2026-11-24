@@ -43,10 +43,12 @@ struct StashView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("닫기") { dismiss() } }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        if tab == .yarn { editingYarn = StashYarn() } else { editingNeedle = StashNeedle() }
-                    } label: { Label(tab == .yarn ? "실 추가" : "바늘 추가", lucide: "plus") }
+                if tab == .yarn ? !store.stash.yarns.isEmpty : !store.stash.needles.isEmpty {   // 비었을 땐 가운데 큰 버튼만
+                    ToolbarItem(placement: .topBarTrailing) {
+                        ToolbarAddButton(title: tab == .yarn ? "실 추가" : "바늘 추가") {
+                            if tab == .yarn { editingYarn = StashYarn() } else { editingNeedle = StashNeedle() }
+                        }
+                    }
                 }
             }
             .sheet(item: $editingYarn) { YarnEditSheet(yarn: $0) }

@@ -1,7 +1,7 @@
 // 오프라인에서도 열리도록 앱 파일을 캐시합니다.
 // 온라인일 땐 항상 최신 파일을 받아오고(네트워크 우선), 오프라인일 때만 캐시를 씁니다.
-const CACHE = 'tteugae-note-v33';
-const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './icon.svg', './Pretendard-Regular.woff2', './knit-cat.png'];
+const CACHE = 'tteugae-note-v35';
+const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './icon.svg', './Pretendard-Regular.woff2', './knit-cat.png', './empty-patterns.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));

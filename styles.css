@@ -614,6 +614,7 @@ select:focus { outline: none; border-color: var(--accent-text); box-shadow: 0 0 
   image-rendering: pixelated;
   animation: knit-cat 1.2s steps(4) infinite;
 }
+.empty-art { width: 150px; height: 150px; image-rendering: pixelated; }
 @keyframes knit-cat { to { background-position: -600px 0; } }
 @media (prefers-reduced-motion: reduce) { .knit-cat { animation: none; } }
 

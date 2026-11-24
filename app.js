@@ -54,9 +54,9 @@ const yarnBall = (size) => `
 </svg>`;
 
 /** 비어 있는 화면: 로고 그림 + 제목 + 설명 + (선택) 버튼, 가운데 정렬 */
-function emptyStateHTML({ title, message = '', note = '', button = '', cls = '' }) {
+function emptyStateHTML({ title, message = '', note = '', button = '', cls = '', art = '' }) {
   return `<div class="empty ${cls}">
-    <div class="knit-cat" aria-hidden="true"></div>
+    ${art ? `<img class="empty-art" src="${art}" alt="" width="150" height="150">` : '<div class="knit-cat" aria-hidden="true"></div>'}
     <h2>${title}</h2>
     ${message ? `<p class="muted">${message}</p>` : ''}
     ${note ? `<p class="muted xsmall">${note}</p>` : ''}
@@ -330,7 +330,7 @@ function renderStash() {
   <header class="bar">
     <a class="icon-btn" href="#/" aria-label="목록으로">${icon('back', 24)}</a>
     <h1 class="bar-title">실·바늘 보관함</h1>
-    <button class="icon-btn" data-action="${stashTab === 'yarn' ? 'add-yarn' : 'add-needle'}" aria-label="${stashTab === 'yarn' ? '실 추가' : '바늘 추가'}">${icon('plus', 22)}</button>
+    ${(stashTab === 'yarn' ? yarns : needles).length ? `<button class="icon-btn" data-action="${stashTab === 'yarn' ? 'add-yarn' : 'add-needle'}" aria-label="${stashTab === 'yarn' ? '실 추가' : '바늘 추가'}">${icon('plus', 22)}</button>` : '<span class="bar-spacer"></span>'}
   </header>
   <div class="tabs" role="tablist">
     <button role="tab" aria-selected="${stashTab === 'yarn'}" data-action="stash-tab" data-tab="yarn">실 <span class="count">${yarns.length}</span></button>
@@ -2620,12 +2620,12 @@ function renderPatterns() {
   <header class="bar">
     <a class="icon-btn" href="#/" aria-label="목록으로">${icon('back', 24)}</a>
     <h1 class="bar-title">도안함</h1>
-    <button class="icon-btn" data-action="add-saved" aria-label="도안 추가">${icon('plus', 22)}</button>
+    ${state.patterns.length ? `<button class="icon-btn" data-action="add-saved" aria-label="도안 추가">${icon('plus', 22)}</button>` : '<span class="bar-spacer"></span>'}
   </header>
   ${state.patterns.length
     ? `<ul class="cards">${state.patterns.map(card).join('')}</ul>
   <button class="btn-primary wobbly stash-add" data-action="add-saved">${icon('plus', 18)} 도안 추가</button>`
-    : emptyStateHTML({ title: '아직 저장한 도안이 없어요', message: '자주 뜨는 도안을 넣어 두면<br>도안 파일, 단별 안내, 실·바늘까지 담긴 채로<br>바로 작품을 시작할 수 있어요.', note: '뜨던 작품의 도안 메뉴에서 ‘도안함에 저장’으로도 넣을 수 있어요.', button: `<button class="btn-primary wobbly" data-action="add-saved">${icon('plus', 18)} 도안 추가</button>`, cls: 'full-empty' })}`;
+    : emptyStateHTML({ title: '아직 저장한 도안이 없어요', message: '자주 뜨는 도안을 넣어 두면<br>도안 파일, 단별 안내, 실·바늘까지 담긴 채로<br>바로 작품을 시작할 수 있어요.', button: `<button class="btn-primary wobbly" data-action="add-saved">${icon('plus', 18)} 도안 추가</button>`, cls: 'full-empty', art: 'empty-patterns.png' })}`;
 }
 
 function openSavedPatternDialog(sp) {
