@@ -2,16 +2,16 @@ import SwiftUI
 import UIKit
 import CoreText
 
-/// 온글잎 박다현체 (Fonts/OwnglyphPDH.ttf)
+/// Pretendard (Fonts/Pretendard-Regular.otf, SIL OFL 1.1)
 /// Info.plist 없이 앱이 켜질 때 직접 등록해요.
 enum AppFont {
-    static let name = "Ownglyph_PDH-Rg"
-    /// 박다현체는 같은 크기에서 글자가 작게 보여서 조금 키워요
-    static let scale: CGFloat = 1.12
+    static let name = "Pretendard-Regular"
+    /// 글자 크기 배율 (Pretendard는 기본 크기 그대로)
+    static let scale: CGFloat = 1.0
 
     static func register() {
-        let url = Bundle.main.url(forResource: "OwnglyphPDH", withExtension: "ttf")
-            ?? Bundle.main.url(forResource: "OwnglyphPDH", withExtension: "ttf", subdirectory: "Fonts")
+        let url = Bundle.main.url(forResource: "Pretendard-Regular", withExtension: "otf")
+            ?? Bundle.main.url(forResource: "Pretendard-Regular", withExtension: "otf", subdirectory: "Fonts")
         guard let url else {
             print("폰트 파일을 찾지 못했어요")
             return

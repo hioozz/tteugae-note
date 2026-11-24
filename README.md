@@ -7,16 +7,12 @@
 
 두 버전의 백업 파일(JSON) 형식이 같아서, 웹에서 내보낸 백업을 아이폰 앱으로 가져올 수 있어요.
 
-## 글꼴 넣기 (처음 받았을 때 꼭 해 주세요)
-글꼴은 온글잎 박다현체(`OwnglyphPDH.ttf`, © VoyagerX & 박다현)를 써요. 폰트 파일은 저작권자 허락 없이 다시 배포하면 안 되므로 저장소에는 들어 있지 않아요.
+## 글꼴
+글꼴은 [Pretendard](https://github.com/orioncactus/pretendard) Regular를 써요. SIL 오픈 폰트 라이선스(OFL 1.1)라서 앱과 웹에 넣어 배포할 수 있고, 저장소에도 들어 있어요.
 
-1. 눈누(noonnu.cc) 등에서 **온글잎 박다현체**를 내려받아요.
-2. 파일 이름을 `OwnglyphPDH.ttf`로 바꿔서 두 곳에 넣어요.
-   - 이 폴더 맨 위 (웹 버전용)
-   - `iOS/TteugaeNote/Fonts/` (아이폰 앱용)
-
-폰트가 없어도 앱은 돌아가지만, 글자가 기본 글꼴로 보여요.
-앱이나 웹에 넣어 다른 사람에게 배포하기 전에는 폰트 배포처의 라이선스(임베딩 허용 여부)를 꼭 확인하세요.
+- 웹: `Pretendard-Regular.woff2`
+- 아이폰 앱: `iOS/TteugaeNote/Fonts/Pretendard-Regular.otf`
+- 라이선스 전문: `fonts-license/Pretendard-OFL.txt`
 
 ## 아이폰 앱 실행하기
 1. Xcode를 설치하고 한 번 열어서 라이선스 동의와 iOS 구성요소 설치를 마쳐요.

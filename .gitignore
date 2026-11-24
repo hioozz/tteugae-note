@@ -1,6 +1,7 @@
-# 폰트 파일은 저작권자 허락 없이 재배포하면 안 돼서 저장소에 올리지 않아요 (README 참고)
+# 재배포가 안 되는 폰트는 올리지 않아요. Pretendard는 OFL이라 올려도 돼요.
 *.ttf
 *.otf
+!iOS/TteugaeNote/Fonts/Pretendard-Regular.otf
 
 # 맥
 .DS_Store

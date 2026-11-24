@@ -1,8 +1,7 @@
-/* 온글잎 박다현체 (Regular 한 굵기) */
+/* Pretendard (Regular 한 굵기, SIL OFL 1.1) */
 @font-face {
-  font-family: "OwnglyphPDH";
-  src: url("OwnglyphPDH.ttf") format("truetype");
-  size-adjust: 112%;
+  font-family: "PretendardApp";
+  src: url("Pretendard-Regular.woff2") format("woff2");
   font-style: normal;
   font-display: swap;
 }
@@ -65,7 +64,7 @@ body {
   color: var(--text);
   /* 꾹꾹체는 굵기가 하나뿐이라, 브라우저가 가짜 굵게를 만들면 거친 테두리가 번져 보여요 */
   font-synthesis: none;
-  font-family: "OwnglyphPDH", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-family: "PretendardApp", "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   line-height: 1.5;
   word-break: keep-all;
   -webkit-tap-highlight-color: transparent;
