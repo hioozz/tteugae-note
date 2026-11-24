@@ -94,7 +94,7 @@ struct PhotosSection: View {
                                 PhotoThumb(fileName: ph.fileName)
                                     .overlay(alignment: .bottomLeading) {
                                         Text("\(ph.row)단")
-                                            .font(.app(.caption))
+                                            .appFont(.caption)
                                             .padding(.horizontal, 7)
                                             .padding(.vertical, 2)
                                             .background(.black.opacity(0.45), in: Capsule())
@@ -189,10 +189,10 @@ struct PhotoViewer: View {
                 if let photo {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("\(photo.createdDate.formatted(.dateTime.year().month().day())) · \(photo.row)단")
-                            .font(.app(.subheadline))
+                            .appFont(.subheadline)
                             .foregroundStyle(.white.opacity(0.75))
                         TextField("", text: $caption, prompt: Text("한 줄 메모 (예: 앞판 완성!)").foregroundStyle(.white.opacity(0.5)))
-                            .font(.app(.body))
+                            .appFont(.body)
                             .foregroundStyle(.white)
                             .focused($editing)
                             .submitLabel(.done)
@@ -261,7 +261,7 @@ struct ZoomablePhoto: View {
             } else {
                 VStack(spacing: 8) {
                     Image(systemName: "photo").font(.largeTitle)
-                    Text("사진 파일이 없어요").font(.app(.body))
+                    Text("사진 파일이 없어요").appFont(.body)
                 }
                 .foregroundStyle(.white.opacity(0.6))
             }

@@ -50,8 +50,8 @@ struct RecordCard: View {
                 .frame(width: 22)
                 .padding(.top, 2)
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.app(.caption)).foregroundStyle(Theme.muted)
-                ForEach(lines, id: \.self) { Text($0).font(.app(.body)) }
+                Text(title).appFont(.caption).foregroundStyle(Theme.muted)
+                ForEach(lines, id: \.self) { Text($0).appFont(.body) }
             }
         }
     }

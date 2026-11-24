@@ -81,16 +81,16 @@ struct StashView: View {
                 let using = store.projectsUsing(needleID: n.id)
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(n.title.isEmpty ? "바늘" : n.title).font(.app(.headline))
+                        Text(n.title.isEmpty ? "바늘" : n.title).appFont(.headline)
                         Spacer()
                         Pill(text: using.isEmpty ? "쉬는 중" : "사용 중",
                              fg: using.isEmpty ? Theme.sage : Theme.warnInk,
                              bg: using.isEmpty ? Theme.sageSoft : Theme.warnBg)
                     }
                     if !using.isEmpty {
-                        Text(using.map(\.name).joined(separator: ", ")).font(.app(.subheadline)).foregroundStyle(Theme.muted)
+                        Text(using.map(\.name).joined(separator: ", ")).appFont(.subheadline).foregroundStyle(Theme.muted)
                     }
-                    if !n.note.isEmpty { Text(n.note).font(.app(.caption)).foregroundStyle(Theme.muted) }
+                    if !n.note.isEmpty { Text(n.note).appFont(.caption).foregroundStyle(Theme.muted) }
                 }
                 .foregroundStyle(Theme.text)
                 .card()
@@ -110,7 +110,7 @@ struct YarnStashCard: View {
         HStack(alignment: .top, spacing: 12) {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .firstTextBaseline) {
-                Text(yarn.title.isEmpty ? "실" : yarn.title).font(.app(.headline))
+                Text(yarn.title.isEmpty ? "실" : yarn.title).appFont(.headline)
                 if !yarn.photo.isEmpty {
                     Image(systemName: "camera").font(.system(size: 13)).foregroundStyle(Theme.muted)
                         .accessibilityLabel("사진 있음")
@@ -121,13 +121,13 @@ struct YarnStashCard: View {
                      bg: left < 0 ? Theme.accentSoft : (left == 0 ? Theme.surface2 : Theme.sageSoft))
             }
             Text(["가진 양 \(amountString(yarn.amount))\(yarn.unit)", yarn.weight, yarn.needleText.isEmpty ? "" : "권장 바늘 \(yarn.needleText)"].filter { !$0.isEmpty }.joined(separator: " · "))
-                .font(.app(.subheadline)).foregroundStyle(Theme.muted)
+                .appFont(.subheadline).foregroundStyle(Theme.muted)
             if !using.isEmpty {
                 Text("쓰는 작품: " + using.map { p in
                     let amt = p.yarnLinks.first { $0.yarnID == yarn.id }?.amount ?? 0
                     return "\(p.name) \(amountString(amt))\(yarn.unit)"
                 }.joined(separator: ", "))
-                .font(.app(.subheadline))
+                .appFont(.subheadline)
             }
             let done = store.projectsDone(yarnID: yarn.id)
             if !done.isEmpty {
@@ -135,10 +135,10 @@ struct YarnStashCard: View {
                     let amt = p.deducted.first { $0.yarnID == yarn.id }?.amount ?? 0
                     return "\(p.name) \(amountString(amt))\(yarn.unit)"
                 }.joined(separator: ", "))
-                .font(.app(.subheadline)).foregroundStyle(Theme.muted)
+                .appFont(.subheadline).foregroundStyle(Theme.muted)
             }
             if left < 0 {
-                Text("가진 양보다 \(amountString(-left))\(yarn.unit) 더 필요해요").font(.app(.caption)).foregroundStyle(Theme.danger)
+                Text("가진 양보다 \(amountString(-left))\(yarn.unit) 더 필요해요").appFont(.caption).foregroundStyle(Theme.danger)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -188,7 +188,7 @@ struct YarnEditSheet: View {
                                 Button("삭제", role: .destructive) { yarn.photo = "" }
                                     .foregroundStyle(Theme.danger)
                             }
-                            .font(.app(.subheadline))
+                            .appFont(.subheadline)
                             .textCase(nil)
                         }
                     }
@@ -296,7 +296,7 @@ struct SinglePhotoViewer: View {
             Color.black.ignoresSafeArea()
             ZoomablePhoto(fileName: fileName)
             HStack {
-                Text(title).font(.app(.headline)).foregroundStyle(.white).lineLimit(1)
+                Text(title).appFont(.headline).foregroundStyle(.white).lineLimit(1)
                 Spacer()
                 Button { dismiss() } label: {
                     Image(systemName: "xmark").font(.system(size: 17)).frame(width: 44, height: 44)
@@ -375,15 +375,15 @@ struct MaterialsSection: View {
                     ForEach(links, id: \.0.yarnID) { link, y in
                         HStack(alignment: .firstTextBaseline) {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(y.title).font(.app(.body))
+                                Text(y.title).appFont(.body)
                                 if project.isDone {
                                     let took = project.deducted.first { $0.yarnID == y.id }?.amount ?? 0
                                     Text(took > 0 ? "완성하면서 보관함에서 \(amountString(took))\(y.unit) 뺐어요" : "보관함에 남은 양이 없어서 빼지 않았어요")
-                                        .font(.app(.caption))
+                                        .appFont(.caption)
                                         .foregroundStyle(Theme.muted)
                                 } else {
                                     Text(store.remaining(y) < 0 ? "보관함보다 \(amountString(-store.remaining(y)))\(y.unit) 부족해요" : "보관함 남은 \(amountString(store.remaining(y)))\(y.unit)")
-                                        .font(.app(.caption))
+                                        .appFont(.caption)
                                         .foregroundStyle(store.remaining(y) < 0 ? Theme.danger : Theme.muted)
                                 }
                             }
@@ -394,7 +394,7 @@ struct MaterialsSection: View {
                     if !needles.isEmpty {
                         HStack(spacing: 6) {
                             Image(systemName: "line.diagonal").foregroundStyle(Theme.accentText)
-                            Text(needles.map(\.title).joined(separator: ", ")).font(.app(.body))
+                            Text(needles.map(\.title).joined(separator: ", ")).appFont(.body)
                         }
                     }
                 }
@@ -432,7 +432,7 @@ struct MaterialPickerSheet: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(y.title.isEmpty ? "실" : y.title)
-                                Text("가진 \(amountString(y.amount))\(y.unit)").font(.app(.caption)).foregroundStyle(.secondary)
+                                Text("가진 \(amountString(y.amount))\(y.unit)").appFont(.caption).foregroundStyle(.secondary)
                             }
                             Spacer()
                             DecimalField(placeholder: "0", value: Binding(

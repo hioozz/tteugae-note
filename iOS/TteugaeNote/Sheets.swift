@@ -132,7 +132,7 @@ struct ReminderEditor: View {
             TextField(reminder.kind == "note" ? "할 일 (예: 무늬 바꾸기)" : "할 일 (예: 양쪽 1코씩 늘리기)", text: $reminder.label)
             if reminder.kind != "note" {
                 HStack(spacing: 4) {
-                    Text("한 번에").font(.app(.footnote)).foregroundStyle(.secondary)
+                    Text("한 번에").appFont(.footnote).foregroundStyle(.secondary)
                     field("2", value: $reminder.stitches, suffix: reminder.kind == "inc" ? "코 늘림" : "코 줄임")
                 }
             }
@@ -152,7 +152,7 @@ struct ReminderEditor: View {
                 .padding(.vertical, 6)
                 .background(Theme.surface2, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
             Text(suffix)
-                .font(.app(.footnote))
+                .appFont(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize()
         }
@@ -224,7 +224,7 @@ struct CounterEditSheet: View {
                 Section {
                     ForEach(steps.indices, id: \.self) { i in
                         HStack(spacing: 10) {
-                            Text("\(i + 1)").font(.app(.caption)).foregroundStyle(.secondary).frame(width: 18)
+                            Text("\(i + 1)").appFont(.caption).foregroundStyle(.secondary).frame(width: 18)
                             TextField(i == 0 ? "예: 짧은뜨기 1" : "예: 사슬뜨기 2", text: $steps[i])
                         }
                     }

@@ -177,7 +177,7 @@ struct PatternScreen: View {
                 withAnimation(.snappy) { drawMode = false }
             } label: {
                 Text("완료")
-                    .font(.app(.body))
+                    .appFont(.body)
                     .padding(.horizontal, 18)
                     .padding(.vertical, 12)
             }
@@ -242,7 +242,7 @@ struct MiniCounterBar: View {
                     Image(systemName: "bell.fill")
                     Text(hits.map { $0.reminder.label }.joined(separator: ", ")).lineLimit(1)
                 }
-                .font(.app(.subheadline))
+                .appFont(.subheadline)
                 .foregroundStyle(Theme.warnInk)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
@@ -259,11 +259,11 @@ struct MiniCounterBar: View {
 
                 VStack(spacing: 0) {
                     Text("\(project.row)")
-                        .font(.app(size: 40, relativeTo: .title))
+                        .appFont(size: 40, relativeTo: .title)
                         .monospacedDigit()
                         .contentTransition(.numericText(value: Double(project.row)))
                     Text(project.targetRows > 0 ? "/ \(project.targetRows)단" : "단")
-                        .font(.app(.caption))
+                        .appFont(.caption)
                         .foregroundStyle(Theme.muted)
                 }
                 .foregroundStyle(Theme.text)
@@ -273,7 +273,7 @@ struct MiniCounterBar: View {
 
                 Button { change(1) } label: {
                     Text("+1단")
-                        .font(.app(size: 26, relativeTo: .title2))
+                        .appFont(size: 26, relativeTo: .title2)
                         .frame(maxWidth: .infinity)
                         .frame(height: 64)
                 }
@@ -490,7 +490,7 @@ struct PatternSection: View {
                         Button(role: .destructive, action: onRemove) { Label("도안 빼기", systemImage: "trash") }
                     } label: {
                         Text("변경")
-                            .font(.app(.subheadline))
+                            .appFont(.subheadline)
                             .foregroundStyle(Theme.text)
                             .padding(.horizontal, 13)
                             .padding(.vertical, 7)
@@ -510,7 +510,7 @@ struct PatternSection: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(ref.title).lineLimit(1)
                             Text(ref.kind == .pdf ? "PDF · \(ref.page + 1)쪽부터" : (ref.url ?? ""))
-                                .font(.app(.caption))
+                                .appFont(.caption)
                                 .foregroundStyle(Theme.muted)
                                 .lineLimit(1)
                         }
@@ -519,7 +519,7 @@ struct PatternSection: View {
                             Text("보면서 뜨기")
                             Image(systemName: "chevron.right").font(.system(size: 12))
                         }
-                        .font(.app(.subheadline))
+                        .appFont(.subheadline)
                         .foregroundStyle(Theme.accentText)
                     }
                     .foregroundStyle(Theme.text)
@@ -530,7 +530,7 @@ struct PatternSection: View {
             } else {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("PDF·사진 도안이나 웹 링크를 붙여 두면, 도안을 보면서 단을 세고 도안 위에 바로 필기할 수 있어요.")
-                        .font(.app(.subheadline))
+                        .appFont(.subheadline)
                         .foregroundStyle(Theme.muted)
                     HStack(spacing: 8) {
                         Button(action: onPickPDF) { Label("파일", systemImage: "doc.badge.plus") }

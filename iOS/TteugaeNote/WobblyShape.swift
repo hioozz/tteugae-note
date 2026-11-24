@@ -106,7 +106,7 @@ struct WobblySegmented<Value: Hashable>: View {
                     withAnimation(.snappy(duration: 0.2)) { selection = item.value }
                 } label: {
                     Text(item.label)
-                        .font(.app(.subheadline))
+                        .appFont(.subheadline)
                         .foregroundStyle(selected ? Theme.text : Theme.muted)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 9)

@@ -82,7 +82,7 @@ struct ToastView: View {
     let message: String
     var body: some View {
         Text(message)
-            .font(.app(.subheadline))
+            .appFont(.subheadline)
             .multilineTextAlignment(.center)
             .foregroundStyle(Theme.bg)
             .padding(.horizontal, 18)
@@ -123,7 +123,7 @@ struct ChipStyle: ButtonStyle {
 
         var body: some View {
             configuration.label
-                .font(.app(.subheadline))
+                .appFont(.subheadline)
                 .foregroundStyle(Theme.text)
                 .padding(.horizontal, 13)
                 .padding(.vertical, 7)
@@ -160,7 +160,7 @@ struct Pill: View {
 
     var body: some View {
         Text(text)
-            .font(.app(.subheadline))
+            .appFont(.subheadline)
             .monospacedDigit()
             .foregroundStyle(fg)
             .padding(.horizontal, 10)
@@ -192,7 +192,7 @@ struct SectionHeader<Trailing: View>: View {
 
     var body: some View {
         HStack {
-            Text(title).font(.app(.headline)).foregroundStyle(Theme.text)
+            Text(title).appFont(.headline).foregroundStyle(Theme.text)
             Spacer()
             trailing
         }
@@ -204,7 +204,7 @@ struct HintBox: View {
 
     var body: some View {
         Text(text)
-            .font(.app(.subheadline))
+            .appFont(.subheadline)
             .foregroundStyle(Theme.muted)
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -244,26 +244,26 @@ struct EmptyStateView: View {
         VStack(spacing: 14) {
             KnittingCatAnimation(size: 150)
             Text(title)
-                .font(.app(.title3))
+                .appFont(.title3)
                 .foregroundStyle(Theme.text)
                 .multilineTextAlignment(.center)
             if !message.isEmpty {
                 Text(message)
-                    .font(.app(.subheadline))
+                    .appFont(.subheadline)
                     .foregroundStyle(Theme.muted)
                     .multilineTextAlignment(.center)
                     .lineSpacing(3)
             }
             if !note.isEmpty {
                 Text(note)
-                    .font(.app(.caption))
+                    .appFont(.caption)
                     .foregroundStyle(Theme.muted)
                     .multilineTextAlignment(.center)
             }
             if let buttonTitle, let action {
                 Button(action: action) {
                     Label(buttonTitle, systemImage: buttonIcon)
-                        .font(.app(.headline))
+                        .appFont(.headline)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 12)
                 }

@@ -18,13 +18,13 @@ struct GuideCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text("\(rowNumber)단 도안").font(.app(.headline))
+                Text("\(rowNumber)단 도안").appFont(.headline)
                 if let g = guide, g.from != g.to {
-                    Text("\(g.label) 같은 내용").font(.app(.caption)).foregroundStyle(Theme.muted)
+                    Text("\(g.label) 같은 내용").appFont(.caption).foregroundStyle(Theme.muted)
                 }
                 Spacer(minLength: 4)
                 if let g = guide, g.total > 0 {
-                    Pill(text: "총 \(g.total)코", fg: Theme.text, bg: Theme.surface2).font(.app(.caption))
+                    Pill(text: "총 \(g.total)코", fg: Theme.text, bg: Theme.surface2).appFont(.caption)
                 }
                 Menu {
                     Button(action: onEdit) { Label("안내 고치기", systemImage: "pencil") }
@@ -50,14 +50,14 @@ struct GuideCard: View {
                                 if i < current {
                                     Image(systemName: "checkmark").font(.system(size: 10, weight: .bold)).foregroundStyle(Theme.surface)
                                 } else {
-                                    Text("\(i + 1)").font(.app(size: 11, relativeTo: .caption2))
+                                    Text("\(i + 1)").appFont(size: 11, relativeTo: .caption2)
                                         .foregroundStyle(i == current ? Theme.surface : Theme.muted)
                                 }
                             }
                             .frame(width: 20, height: 20)
                             .alignmentGuide(.firstTextBaseline) { $0[VerticalAlignment.center] + 5 }
                             Text(s)
-                                .font(i == current ? .app(size: 22, relativeTo: .title3) : .app(.body))
+                                .appFont(size: i == current ? 22 : 17, relativeTo: i == current ? .title3 : .body)
                                 .foregroundStyle(i == current ? Theme.text : Theme.muted)
                                 .strikethrough(i < current, color: Theme.muted.opacity(0.5))
                                 .fixedSize(horizontal: false, vertical: true)
@@ -79,7 +79,7 @@ struct GuideCard: View {
                         Label(current + 1 >= steps.count ? "\(rowNumber)단 끝 · 다음 단으로" : "다음 단계",
                               systemImage: current + 1 >= steps.count ? "checkmark" : "chevron.right")
                             .labelStyle(TrailingIconLabelStyle())
-                            .font(.app(.headline))
+                            .appFont(.headline)
                             .frame(maxWidth: .infinity)
                             .frame(height: 52)
                     }
@@ -89,7 +89,7 @@ struct GuideCard: View {
                 Text(rowNumber > project.guideMaxRow
                      ? "도안 안내는 \(project.guideMaxRow)단까지예요. 다 떴어요!"
                      : "\(rowNumber)단은 도안에 안내가 없어요.")
-                    .font(.app(.subheadline))
+                    .appFont(.subheadline)
                     .foregroundStyle(Theme.muted)
             }
 
@@ -104,13 +104,13 @@ struct GuideCard: View {
                                 .foregroundStyle(isNow ? Theme.text : Theme.muted)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
-                        .font(.app(.subheadline))
+                        .appFont(.subheadline)
                     }
                 }
                 .padding(.top, 6)
             } label: {
                 Text(project.guidePart.isEmpty ? "전체 단 보기" : "\(project.guidePart) 전체 보기")
-                    .font(.app(.subheadline))
+                    .appFont(.subheadline)
                     .foregroundStyle(Theme.muted)
             }
             .tint(Theme.muted)
@@ -209,7 +209,7 @@ struct GuideImportSheet: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("실·바늘 칸 채우기")
                                 Text([result.yarn, result.needle].filter { !$0.isEmpty }.joined(separator: " · "))
-                                    .font(.app(.caption)).foregroundStyle(Theme.muted)
+                                    .appFont(.caption).foregroundStyle(Theme.muted)
                             }
                         }
                     }
@@ -218,7 +218,7 @@ struct GuideImportSheet: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("나머지 부분은 메모에 붙이기")
                                 Text(others.map(\.name).joined(separator: ", "))
-                                    .font(.app(.caption)).foregroundStyle(Theme.muted)
+                                    .appFont(.caption).foregroundStyle(Theme.muted)
                             }
                         }
                     }
@@ -304,7 +304,7 @@ private struct GuideRowEditor: View {
                 Text("단").foregroundStyle(Theme.muted)
                 Spacer()
                 if row.total > 0 {
-                    Text("총 \(row.total)코").font(.app(.caption)).foregroundStyle(Theme.muted)
+                    Text("총 \(row.total)코").appFont(.caption).foregroundStyle(Theme.muted)
                 }
             }
             TextField("", text: $row.text, prompt: Text(verbatim: "뜨는 방법 (예: 사슬2, 짧은뜨기1*5)"), axis: .vertical)
@@ -312,7 +312,7 @@ private struct GuideRowEditor: View {
             let steps = row.steps
             if steps.count > 1 {
                 Text(steps.joined(separator: "  →  "))
-                    .font(.app(.caption))
+                    .appFont(.caption)
                     .foregroundStyle(Theme.muted)
             }
         }

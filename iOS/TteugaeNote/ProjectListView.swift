@@ -73,7 +73,7 @@ struct ProjectListView: View {
             VStack(alignment: .leading, spacing: 14) {
                 let today = store.rowsToday()
                 Text(today > 0 ? "오늘 \(today)단 떴어요" : "오늘도 한 단씩")
-                    .font(.app(.subheadline))
+                    .appFont(.subheadline)
                     .foregroundStyle(Theme.muted)
                 HStack(spacing: 8) {
                     Button { showLibrary = true } label: { Label("도안함", systemImage: "book") }
@@ -186,7 +186,7 @@ struct ProjectCard: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .firstTextBaseline) {
                 Text(project.name)
-                    .font(.app(.headline))
+                    .appFont(.headline)
                     .foregroundStyle(Theme.text)
                 Spacer(minLength: 8)
                 if project.isDone {
@@ -198,19 +198,19 @@ struct ProjectCard: View {
                 }
             }
             if !project.meta.isEmpty {
-                Text(project.meta).font(.app(.subheadline)).foregroundStyle(Theme.muted)
+                Text(project.meta).appFont(.subheadline).foregroundStyle(Theme.muted)
             }
             if project.isPaused && !project.resumeNote.isEmpty {
-                Text("“\(project.resumeNote)”").font(.app(.subheadline)).foregroundStyle(Theme.warnInk).lineLimit(2)
+                Text("“\(project.resumeNote)”").appFont(.subheadline).foregroundStyle(Theme.warnInk).lineLimit(2)
             }
             if let pr = project.progress {
                 ProgressBar(value: pr).padding(.top, 8)
                 Text("\(project.row) / \(project.targetRows)단 · \(Int((pr * 100).rounded()))%")
-                    .font(.app(.subheadline))
+                    .appFont(.subheadline)
                     .foregroundStyle(Theme.muted)
             }
             Text("\(project.updatedDate, format: .relative(presentation: .named)) 수정")
-                .font(.app(.caption))
+                .appFont(.caption)
                 .foregroundStyle(Theme.muted)
                 .padding(.top, 2)
         }

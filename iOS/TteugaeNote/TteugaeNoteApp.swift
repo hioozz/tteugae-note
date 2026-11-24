@@ -15,7 +15,7 @@ struct TteugaeNoteApp: App {
             ProjectListView()
                 .environment(store)
                 .environment(toast)
-                .font(.app(.body))
+                .appFont(.body)
                 .tint(Theme.accentText) // 글자·토글에 쓰이는 색은 읽히도록 진한 장미색
                 .overlay(alignment: .bottom) {
                     if let message = toast.message {

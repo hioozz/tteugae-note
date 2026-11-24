@@ -23,7 +23,7 @@ struct DoneProjectsView: View {
                 } else {
                     VStack(alignment: .leading, spacing: 14) {
                         Text(summary)
-                            .font(.app(.subheadline))
+                            .appFont(.subheadline)
                             .foregroundStyle(Theme.muted)
                         ForEach(done) { p in
                             Button {
@@ -64,15 +64,15 @@ struct DoneCard: View {
             }
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline) {
-                    Text(project.name).font(.app(.headline))
+                    Text(project.name).appFont(.headline)
                     Spacer(minLength: 8)
                     Pill(text: "\(project.row)단", fg: Theme.sage, bg: Theme.sageSoft)
                 }
                 Text("\(project.doneDate.formatted(.dateTime.year().month().day())) 완성 · \(project.daysTaken)일 걸림")
-                    .font(.app(.subheadline))
+                    .appFont(.subheadline)
                     .foregroundStyle(Theme.muted)
                 if !project.meta.isEmpty {
-                    Text(project.meta).font(.app(.subheadline)).foregroundStyle(Theme.muted)
+                    Text(project.meta).appFont(.subheadline).foregroundStyle(Theme.muted)
                 }
             }
             if project.hasRecord {
@@ -95,7 +95,7 @@ struct DoneCard: View {
     private func line(_ symbol: String, _ text: String) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             Image(systemName: symbol).font(.system(size: 13)).foregroundStyle(Theme.accentText).frame(width: 18)
-            Text(text).font(.app(.subheadline)).lineLimit(3)
+            Text(text).appFont(.subheadline).lineLimit(3)
         }
     }
 }

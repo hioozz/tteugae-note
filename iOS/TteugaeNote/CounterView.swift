@@ -47,7 +47,7 @@ struct CounterView: View {
                     pausedBanner(p).padding(.bottom, 12)
                 }
                 if !p.meta.isEmpty {
-                    Text(p.meta).font(.app(.subheadline)).foregroundStyle(Theme.muted)
+                    Text(p.meta).appFont(.subheadline).foregroundStyle(Theme.muted)
                 }
                 let hasGuide = !p.guide.isEmpty
                 if hasGuide {
@@ -205,18 +205,18 @@ struct CounterView: View {
         VStack(spacing: 4) {
             HStack(spacing: 6) {
                 Text("현재 단")
-                if p.isDone { Pill(text: "완성", fg: Theme.sage, bg: Theme.sageSoft).font(.app(.caption)) }
+                if p.isDone { Pill(text: "완성", fg: Theme.sage, bg: Theme.sageSoft).appFont(.caption) }
             }
-            .font(.app(.subheadline))
+            .appFont(.subheadline)
             .foregroundStyle(Theme.muted)
 
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 Text("\(p.row)")
-                    .font(.app(size: 120, relativeTo: .largeTitle))
+                    .appFont(size: 120, relativeTo: .largeTitle)
                     .monospacedDigit()
                     .contentTransition(.numericText(value: Double(p.row)))
                 Text("단")
-                    .font(.app(.title2))
+                    .appFont(.title2)
                     .foregroundStyle(Theme.muted)
             }
             .foregroundStyle(Theme.text)
@@ -227,7 +227,7 @@ struct CounterView: View {
 
             if let pr = p.progress {
                 Text(targetText(p, progress: pr))
-                    .font(.app(.subheadline))
+                    .appFont(.subheadline)
                     .monospacedDigit()
                     .foregroundStyle(Theme.muted)
                 ProgressBar(value: pr)
@@ -235,7 +235,7 @@ struct CounterView: View {
                     .padding(.top, 4)
             }
             Text("오늘 \(p.log[Store.todayKey()] ?? 0)단 떴어요")
-                .font(.app(.subheadline))
+                .appFont(.subheadline)
                 .foregroundStyle(Theme.muted)
                 .padding(.top, 8)
             progressSummary(p)
@@ -248,13 +248,13 @@ struct CounterView: View {
         VStack(spacing: 6) {
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 Text("\(p.guideRowNumber)")
-                    .font(.app(size: 56, relativeTo: .largeTitle))
+                    .appFont(size: 56, relativeTo: .largeTitle)
                     .monospacedDigit()
                     .contentTransition(.numericText(value: Double(p.guideRowNumber)))
                 Text(p.targetRows > 0 ? "/ \(p.targetRows)단" : "단째")
-                    .font(.app(.title3))
+                    .appFont(.title3)
                     .foregroundStyle(Theme.muted)
-                if p.isDone { Pill(text: "완성", fg: Theme.sage, bg: Theme.sageSoft).font(.app(.caption)) }
+                if p.isDone { Pill(text: "완성", fg: Theme.sage, bg: Theme.sageSoft).appFont(.caption) }
             }
             .foregroundStyle(Theme.text)
             .accessibilityElement(children: .combine)
@@ -263,7 +263,7 @@ struct CounterView: View {
                 ProgressBar(value: pr).frame(maxWidth: 280)
             }
             Text("오늘 \(p.log[Store.todayKey()] ?? 0)단 떴어요")
-                .font(.app(.subheadline))
+                .appFont(.subheadline)
                 .foregroundStyle(Theme.muted)
             progressSummary(p)
         }
@@ -283,7 +283,7 @@ struct CounterView: View {
                     if p.guideRow(at: p.guideRowNumber) != nil { moveGuide(1, wholeRow: true) } else { changeRow(1) }
                 } label: {
                     Text("+1단 · 단계 없이 이 단 끝")
-                        .font(.app(.subheadline))
+                        .appFont(.subheadline)
                         .frame(maxWidth: .infinity)
                         .frame(height: 48)
                 }
@@ -311,7 +311,7 @@ struct CounterView: View {
                     Pill(text: "지금 \(stitches)코", fg: Theme.text, bg: Theme.surface2)
                 }
             }
-            .font(.app(.subheadline))
+            .appFont(.subheadline)
             .padding(.top, 8)
             .accessibilityElement(children: .combine)
         }
@@ -337,7 +337,7 @@ struct CounterView: View {
 
             Button { changeRow(1) } label: {
                 Text("+1단")
-                    .font(.app(size: 32, relativeTo: .title))
+                    .appFont(size: 32, relativeTo: .title)
                     .frame(maxWidth: .infinity)
                     .frame(height: 128)
             }
@@ -372,7 +372,7 @@ struct CounterView: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: "bell.fill").padding(.top, 2)
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(row)단에서 할 일").font(.app(.headline))
+                Text("\(row)단에서 할 일").appFont(.headline)
                 ForEach(hits) { h in
                     Text("• " + h.reminder.label + (h.reminder.times > 0 ? " (\(h.index + 1)/\(h.reminder.times)회)" : ""))
                 }
@@ -452,18 +452,18 @@ struct CounterView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Image(systemName: "pause.circle")
-                Text("잠시 멈춘 작품이에요").font(.app(.headline))
+                Text("잠시 멈춘 작품이에요").appFont(.headline)
                 Spacer(minLength: 0)
                 if let d = p.pausedDate {
-                    Text(d, format: .dateTime.month().day()).font(.app(.caption))
+                    Text(d, format: .dateTime.month().day()).appFont(.caption)
                 }
             }
             if !p.resumeNote.isEmpty {
-                Text("“\(p.resumeNote)”").font(.app(.body))
+                Text("“\(p.resumeNote)”").appFont(.body)
             }
             Text([ "\(p.row)단", p.needle.isEmpty ? nil : p.needle, p.pattern?.kind == .pdf ? "도안 \((p.pattern?.page ?? 0) + 1)쪽" : nil ]
                     .compactMap { $0 }.joined(separator: " · "))
-                .font(.app(.subheadline))
+                .appFont(.subheadline)
                 .opacity(0.8)
             Button {
                 store.resume(projectID)
@@ -471,7 +471,7 @@ struct CounterView: View {
                 toast.show("다시 시작해요!")
             } label: {
                 Label("다시 시작", systemImage: "play.fill")
-                    .font(.app(.body))
+                    .appFont(.body)
                     .padding(.horizontal, 18)
                     .padding(.vertical, 10)
             }
@@ -497,9 +497,9 @@ struct CounterView: View {
                 ForEach(p.changes) { c in
                     HStack(alignment: .top, spacing: 10) {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(c.text).font(.app(.body))
+                            Text(c.text).appFont(.body)
                             Text("\(c.row)단 · \(c.dateValue.formatted(.dateTime.month().day()))")
-                                .font(.app(.caption))
+                                .appFont(.caption)
                                 .foregroundStyle(Theme.muted)
                         }
                         Spacer(minLength: 4)
@@ -528,7 +528,7 @@ struct CounterView: View {
                     showPause = true
                 } label: {
                     Label("잠시 멈춤", systemImage: "pause")
-                        .font(.app(.headline))
+                        .appFont(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(15)
                         .foregroundStyle(Theme.warnInk)
@@ -556,7 +556,7 @@ struct CounterView: View {
         } label: {
             Label(p.isDone ? "진행 중으로 되돌리기" : "완성으로 표시",
                   systemImage: p.isDone ? "arrow.uturn.backward" : "checkmark")
-                .font(.app(.headline))
+                .appFont(.headline)
                 .frame(maxWidth: .infinity)
                 .padding(15)
                 .foregroundStyle(Theme.sage)
@@ -679,19 +679,19 @@ struct ReminderRow: View {
 
         HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(reminder.label).font(.app(.body))
-                Text(reminder.ruleText).font(.app(.caption)).opacity(0.75)
+                Text(reminder.label).appFont(.body)
+                Text(reminder.ruleText).appFont(.caption).opacity(0.75)
             }
             Spacer(minLength: 8)
             VStack(alignment: .trailing, spacing: 2) {
                 if let idx {
                     Text("이번 단")
                     if reminder.times > 0 {
-                        Text("\(idx + 1)/\(reminder.times)회").font(.app(.caption))
+                        Text("\(idx + 1)/\(reminder.times)회").appFont(.caption)
                     }
                 } else if let next {
                     Text("\(next.row)단").monospacedDigit()
-                    Text("\(next.row - row)단 후").font(.app(.caption)).foregroundStyle(Theme.muted)
+                    Text("\(next.row - row)단 후").appFont(.caption).foregroundStyle(Theme.muted)
                 } else {
                     Text("완료").foregroundStyle(Theme.muted)
                 }
@@ -713,10 +713,10 @@ struct CounterRow: View {
         HStack(spacing: 8) {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
-                    Text(counter.name).font(.app(.body))
+                    Text(counter.name).appFont(.body)
                     if counter.linked {
                         Label("단 연동", systemImage: "link")
-                            .font(.app(.caption2))
+                            .appFont(.caption2)
                             .foregroundStyle(Theme.sage)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 2)
@@ -725,7 +725,7 @@ struct CounterRow: View {
                 }
                 HStack(alignment: .firstTextBaseline, spacing: 3) {
                     Text("\(counter.displayValue(row: row))")
-                        .font(.app(size: 28, relativeTo: .title2))
+                        .appFont(size: 28, relativeTo: .title2)
                         .monospacedDigit()
                         .contentTransition(.numericText())
                     if counter.max > 0 {
@@ -779,7 +779,7 @@ struct SequenceCounterCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(counter.name).font(.app(.body))
+                Text(counter.name).appFont(.body)
                 Spacer(minLength: 4)
                 Button { onMove(1, true) } label: { roundText }
                     .buttonStyle(.plain)
@@ -795,22 +795,22 @@ struct SequenceCounterCard: View {
             if counter.isFinished {
                 VStack(alignment: .leading, spacing: 4) {
                     Label("\(counter.max)번 반복 완료", systemImage: "checkmark.circle.fill")
-                        .font(.app(size: 22, relativeTo: .title3))
+                        .appFont(size: 22, relativeTo: .title3)
                         .foregroundStyle(Theme.sage)
-                    Text("다음을 누르면 처음부터 다시 세요").font(.app(.caption)).foregroundStyle(Theme.muted)
+                    Text("다음을 누르면 처음부터 다시 세요").appFont(.caption).foregroundStyle(Theme.muted)
                 }
             } else {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
-                        Text("지금").font(.app(.caption)).foregroundStyle(Theme.muted).frame(width: 30, alignment: .leading)
+                        Text("지금").appFont(.caption).foregroundStyle(Theme.muted).frame(width: 30, alignment: .leading)
                         Text(steps[current])
-                            .font(.app(size: 24, relativeTo: .title2))
+                            .appFont(size: 24, relativeTo: .title2)
                             .contentTransition(.opacity)
                             .id(current)
                     }
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
-                        Text("다음").font(.app(.caption)).foregroundStyle(Theme.muted).frame(width: 30, alignment: .leading)
-                        Text(nextText).font(.app(.subheadline)).foregroundStyle(Theme.muted)
+                        Text("다음").appFont(.caption).foregroundStyle(Theme.muted).frame(width: 30, alignment: .leading)
+                        Text(nextText).appFont(.subheadline).foregroundStyle(Theme.muted)
                     }
                 }
                 .accessibilityElement(children: .combine)
@@ -837,7 +837,7 @@ struct SequenceCounterCard: View {
                 Button { onMove(1, false) } label: {
                     Label(counter.isFinished ? "처음부터" : "다음 단계", systemImage: counter.isFinished ? "arrow.counterclockwise" : "chevron.right")
                         .labelStyle(TrailingIconLabelStyle())
-                        .font(.app(.headline))
+                        .appFont(.headline)
                         .frame(maxWidth: .infinity)
                         .frame(height: 52)
                 }
@@ -851,8 +851,8 @@ struct SequenceCounterCard: View {
     private var roundText: some View {
         let now = counter.isFinished ? counter.max : counter.value + 1
         return HStack(alignment: .firstTextBaseline, spacing: 2) {
-            Text("\(now)").font(.app(size: 22, relativeTo: .title3)).monospacedDigit().contentTransition(.numericText())
-            Text(counter.max > 0 ? "/ \(counter.max)번째" : "번째").font(.app(.caption)).foregroundStyle(Theme.muted)
+            Text("\(now)").appFont(size: 22, relativeTo: .title3).monospacedDigit().contentTransition(.numericText())
+            Text(counter.max > 0 ? "/ \(counter.max)번째" : "번째").appFont(.caption).foregroundStyle(Theme.muted)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 4)

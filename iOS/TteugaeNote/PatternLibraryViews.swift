@@ -81,13 +81,13 @@ struct SavedPatternCard: View {
                         .frame(width: 44, height: 44)
                         .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(pattern.name.isEmpty ? "도안" : pattern.name).font(.app(.headline))
+                        Text(pattern.name.isEmpty ? "도안" : pattern.name).appFont(.headline)
                         if !meta.isEmpty {
-                            Text(meta).font(.app(.subheadline)).foregroundStyle(Theme.muted)
+                            Text(meta).appFont(.subheadline).foregroundStyle(Theme.muted)
                         }
                         let mat = [pattern.yarn, pattern.needle].filter { !$0.isEmpty }.joined(separator: " · ")
                         if !mat.isEmpty {
-                            Text(mat).font(.app(.subheadline)).foregroundStyle(Theme.muted).lineLimit(1)
+                            Text(mat).appFont(.subheadline).foregroundStyle(Theme.muted).lineLimit(1)
                         }
                     }
                     Spacer(minLength: 0)
@@ -99,7 +99,7 @@ struct SavedPatternCard: View {
             Button(action: onStart) {
                 Label("이 도안으로 작품 시작", systemImage: "play.fill")
                     .labelStyle(TrailingIconLabelStyle())
-                    .font(.app(.headline))
+                    .appFont(.headline)
                     .frame(maxWidth: .infinity)
                     .frame(height: 46)
             }
@@ -184,7 +184,7 @@ struct SavedPatternSheet: View {
                     } label: {
                         Label("이 도안으로 작품 시작", systemImage: "play.fill")
                             .labelStyle(TrailingIconLabelStyle())
-                            .font(.app(.headline))
+                            .appFont(.headline)
                             .frame(maxWidth: .infinity)
                             .frame(height: 52)
                     }
@@ -251,7 +251,7 @@ struct SavedPatternSheet: View {
                         .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                     VStack(alignment: .leading, spacing: 2) {
                         Text(f.title).lineLimit(1)
-                        Text(f.kind == .pdf ? "PDF·사진 도안" : (f.url ?? "")).font(.app(.caption)).foregroundStyle(Theme.muted).lineLimit(1)
+                        Text(f.kind == .pdf ? "PDF·사진 도안" : (f.url ?? "")).appFont(.caption).foregroundStyle(Theme.muted).lineLimit(1)
                     }
                 }
             } else {
@@ -278,7 +278,7 @@ struct SavedPatternSheet: View {
                         Button("삭제", role: .destructive) { draft.file = nil }
                             .foregroundStyle(Theme.danger)
                     }
-                    .font(.app(.subheadline))
+                    .appFont(.subheadline)
                     .textCase(nil)
                 }
             }
