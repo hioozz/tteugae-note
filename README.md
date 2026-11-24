@@ -18,7 +18,7 @@
 1. Xcode를 설치하고 한 번 열어서 라이선스 동의와 iOS 구성요소 설치를 마쳐요.
 2. `iOS/TteugaeNote.xcodeproj`를 열고 위쪽에서 시뮬레이터(예: iPhone 17)를 고른 뒤 ▶︎를 눌러요.
 3. 내 아이폰에 설치하려면 아이폰을 케이블로 연결해요. 그다음 TteugaeNote 타깃 → Signing & Capabilities → Team에서 내 Apple 계정을 고르고 실행해요. 무료 계정은 7일마다 다시 설치해야 해요.
-   - "번들 ID가 이미 사용 중"이라고 나오면 Bundle Identifier를 `app.tteugaenote.TteugaeNote`에서 나만의 이름으로 바꿔요.
+   - "번들 ID가 이미 사용 중"이라고 나오면 Bundle Identifier를 `com.leejungheon.tteugaenote.TteugaeNote`에서 나만의 이름으로 바꿔요.
 4. 앱스토어에 올리려면 Apple Developer Program(연 $99)에 가입해야 해요.
 
 `iOS/TteugaeNote` 폴더에 파일을 추가하면 Xcode 프로젝트에 자동으로 포함돼요.
