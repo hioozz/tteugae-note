@@ -234,11 +234,7 @@ struct CounterView: View {
                     .frame(maxWidth: 280)
                     .padding(.top, 4)
             }
-            Text("오늘 \(p.log[Store.todayKey()] ?? 0)단 떴어요")
-                .appFont(.subheadline)
-                .foregroundStyle(Theme.muted)
-                .padding(.top, 8)
-            progressSummary(p)
+            statusLine(p).padding(.top, 8)
         }
         .padding(.vertical, 12)
     }
@@ -262,10 +258,7 @@ struct CounterView: View {
             if let pr = p.progress {
                 ProgressBar(value: pr).frame(maxWidth: 280)
             }
-            Text("오늘 \(p.log[Store.todayKey()] ?? 0)단 떴어요")
-                .appFont(.subheadline)
-                .foregroundStyle(Theme.muted)
-            progressSummary(p)
+            statusLine(p)
         }
         .padding(.top, 8)
     }
@@ -294,27 +287,15 @@ struct CounterView: View {
         }
     }
 
-    /// 늘림·줄임 횟수와 지금 코 수를 한눈에
-    @ViewBuilder
-    private func progressSummary(_ p: Project) -> some View {
-        let shaping = p.reminders.filter { $0.kindLabel != nil }
-        let stitches = p.stitchCount(at: p.row)
-        if !shaping.isEmpty || stitches != nil {
-            HStack(spacing: 6) {
-                ForEach(shaping) { r in
-                    let done = r.doneCount(at: p.row)
-                    Pill(text: "\(r.kindLabel ?? "") \(done)\(r.times > 0 ? "/\(r.times)" : "")회",
-                         fg: r.kind == "inc" ? Theme.sage : Theme.accentText,
-                         bg: r.kind == "inc" ? Theme.sageSoft : Theme.accentSoft)
-                }
-                if let stitches {
-                    Pill(text: "지금 \(stitches)코", fg: Theme.text, bg: Theme.surface2)
-                }
-            }
+    /// 오늘 뜬 단 수와 지금 코 수를 한 줄로 (색 없이)
+    /// 늘림·줄임 횟수는 그 단이 되면 "N단에서 할 일" 카드에 나오므로 여기선 빼요
+    private func statusLine(_ p: Project) -> some View {
+        var parts = ["오늘 \(p.log[Store.todayKey()] ?? 0)단 떴어요"]
+        if let stitches = p.stitchCount(at: p.row) { parts.append("지금 \(stitches)코") }
+        return Text(parts.joined(separator: " · "))
             .appFont(.subheadline)
-            .padding(.top, 8)
-            .accessibilityElement(children: .combine)
-        }
+            .monospacedDigit()
+            .foregroundStyle(Theme.muted)
     }
 
     private func targetText(_ p: Project, progress: Double) -> String {

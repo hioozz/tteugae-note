@@ -1202,14 +1202,11 @@ function subCounterHTML(p, c) {
   </li>`;
 }
 
-function summaryHTML(p) {
-  const shaping = p.reminders.filter((r) => KIND_LABEL[r.kind]);
+// 오늘 뜬 단 수와 지금 코 수를 한 줄로 (색 없이)
+// 늘림·줄임 횟수는 그 단이 되면 "N단에서 할 일" 카드에 나오므로 여기선 빼요
+function statusLineHTML(p, today) {
   const st = stitchCount(p);
-  if (!shaping.length && st == null) return '';
-  return `<div class="summary">
-    ${shaping.map((r) => `<span class="pill ${r.kind}">${KIND_LABEL[r.kind]} ${remDone(r, p.row)}${r.times ? `/${r.times}` : ''}회</span>`).join('')}
-    ${st != null ? `<span class="pill now">지금 ${st}코</span>` : ''}
-  </div>`;
+  return `<div class="today">오늘 ${today}단 떴어요${st != null ? ` · 지금 ${st}코` : ''}</div>`;
 }
 
 function reminderHTML(p, r) {
@@ -1248,8 +1245,7 @@ function renderCounter(p, bump = false) {
   <section class="main-counter compact" aria-live="polite">
     <div class="row-num ${bump ? 'bump' : ''}">${guideRowNo(p)}<small>${p.targetRows ? `/ ${p.targetRows}단` : '단째'}</small>${p.status === 'done' ? ` <span class="badge">${icon('check', 12)} 완성</span>` : ''}</div>
     ${pct !== null ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}
-    <div class="today">오늘 ${today}단 떴어요</div>
-    ${summaryHTML(p)}
+    ${statusLineHTML(p, today)}
   </section>` : `
   <section class="main-counter" aria-live="polite">
     <div class="row-label">현재 단 ${p.status === 'done' ? `<span class="badge">${icon('check', 12)} 완성</span>` : ''}</div>
@@ -1257,8 +1253,7 @@ function renderCounter(p, bump = false) {
     ${pct !== null ? `
       <div class="target">목표 ${p.targetRows}단 · ${Math.round(pct)}%${p.row < p.targetRows ? ` · ${p.targetRows - p.row}단 남음` : ''}</div>
       <div class="progress"><span style="width:${pct}%"></span></div>` : ''}
-    <div class="today">오늘 ${today}단 떴어요</div>
-    ${summaryHTML(p)}
+    ${statusLineHTML(p, today)}
   </section>
 
   <div class="tap-row">
