@@ -64,7 +64,7 @@ struct PatternScreen: View {
         if let p = store.project(projectID), let ref = p.pattern {
             content(p, ref)
         } else {
-            ContentUnavailableView("도안이 없어요", systemImage: "doc")
+            ContentUnavailableView { Label("도안이 없어요", lucide: "doc") }
         }
     }
 
@@ -92,7 +92,7 @@ struct PatternScreen: View {
                     Button {
                         withAnimation(.snappy) { drawMode.toggle() }
                     } label: {
-                        Image(systemName: drawMode ? "pencil.tip.crop.circle.fill" : "pencil.tip.crop.circle")
+                        Image(lucide: drawMode ? "pencil.tip.crop.circle.fill" : "pencil.tip.crop.circle")
                     }
                     .accessibilityLabel(drawMode ? "필기 끝내기" : "도안에 필기하기")
                 }
@@ -102,13 +102,13 @@ struct PatternScreen: View {
                     withAnimation(.snappy) { showMarker.toggle() }
                     store.setMarker(projectID, showMarker ? Double(markerY) : nil)
                 } label: {
-                    Image(systemName: showMarker ? "text.line.first.and.arrowtriangle.forward" : "text.alignleft")
+                    Image(lucide: showMarker ? "text.line.first.and.arrowtriangle.forward" : "text.alignleft")
                 }
                 .accessibilityLabel(showMarker ? "줄 표시 끄기" : "줄 표시 켜기")
             }
             if ref.kind == .web, let s = ref.url, let url = URL(string: s) {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Link(destination: url) { Image(systemName: "safari") }
+                    Link(destination: url) { Image(lucide: "safari") }
                         .accessibilityLabel("Safari에서 열기")
                 }
             }
@@ -133,14 +133,17 @@ struct PatternScreen: View {
                     store.setPatternPage(projectID, page)
                 }
             } else {
-                ContentUnavailableView("PDF 파일을 찾을 수 없어요", systemImage: "doc.questionmark",
-                                       description: Text("작품 화면에서 도안을 다시 불러와 주세요."))
+                ContentUnavailableView {
+                    Label("PDF 파일을 찾을 수 없어요", lucide: "doc.questionmark")
+                } description: {
+                    Text("작품 화면에서 도안을 다시 불러와 주세요.")
+                }
             }
         case .web:
             if let s = ref.url, let url = URL(string: s) {
                 WebPatternView(url: url)
             } else {
-                ContentUnavailableView("링크를 열 수 없어요", systemImage: "link")
+                ContentUnavailableView { Label("링크를 열 수 없어요", lucide: "link") }
             }
         }
     }
@@ -150,8 +153,8 @@ struct PatternScreen: View {
         HStack(spacing: 8) {
             ForEach(InkTool.allCases) { t in
                 Button { tool = t } label: {
-                    Image(systemName: t.symbol)
-                        .font(.system(size: 20))
+                    Image(lucide: t.symbol)
+                        .iconSize(24)
                         .foregroundStyle(t.swatch)
                         .frame(width: 48, height: 48)
                         .background {
@@ -164,8 +167,8 @@ struct PatternScreen: View {
                 .accessibilityAddTraits(tool == t ? [.isSelected] : [])
             }
             Button { undoTick += 1 } label: {
-                Image(systemName: "arrow.uturn.backward")
-                    .font(.system(size: 18))
+                Image(lucide: "arrow.uturn.backward")
+                    .iconSize(22)
                     .frame(width: 44, height: 48)
                     .contentShape(Rectangle())
             }
@@ -201,8 +204,8 @@ struct PatternScreen: View {
                     .strokeBorder(Theme.accentText.opacity(0.55), lineWidth: 1.5)
             )
             .overlay(alignment: .trailing) {
-                Image(systemName: "line.3.horizontal")
-                    .font(.system(size: 14))
+                Image(lucide: "line.3.horizontal")
+                    .iconSize(17)
                     .foregroundStyle(Theme.accentText)
                     .padding(.trailing, 10)
             }
@@ -239,7 +242,7 @@ struct MiniCounterBar: View {
         VStack(spacing: 8) {
             if !hits.isEmpty {
                 HStack(spacing: 6) {
-                    Image(systemName: "bell.fill")
+                    Image(lucide: "bell.fill")
                     Text(hits.map { $0.reminder.label }.joined(separator: ", ")).lineLimit(1)
                 }
                 .appFont(.subheadline)
@@ -250,8 +253,8 @@ struct MiniCounterBar: View {
             }
             HStack(spacing: 12) {
                 Button { change(-1) } label: {
-                    Image(systemName: "minus")
-                        .font(.system(size: 22))
+                    Image(lucide: "minus")
+                        .iconSize(26)
                         .frame(width: 64, height: 64)
                 }
                 .buttonStyle(PressStyle(bg: Theme.surface2, fg: Theme.text, radius: 20))
@@ -479,15 +482,15 @@ struct PatternSection: View {
             SectionHeader(title: "도안") {
                 if project.pattern != nil {
                     Menu {
-                        Button(action: onPickPDF) { Label("파일(PDF·이미지)로 바꾸기", systemImage: "doc.badge.plus") }
-                        PhotosPicker(selection: $photoItem, matching: .images) { Label("사진으로 바꾸기", systemImage: "photo") }
-                        Button(action: onAddWeb) { Label("웹 링크로 바꾸기", systemImage: "link") }
+                        Button(action: onPickPDF) { Label("파일(PDF·이미지)로 바꾸기", lucide: "doc.badge.plus") }
+                        PhotosPicker(selection: $photoItem, matching: .images) { Label("사진으로 바꾸기", lucide: "photo") }
+                        Button(action: onAddWeb) { Label("웹 링크로 바꾸기", lucide: "link") }
                         if let onSaveToLibrary {
                             Divider()
-                            Button(action: onSaveToLibrary) { Label("도안함에 저장", systemImage: "book") }
+                            Button(action: onSaveToLibrary) { Label("도안함에 저장", lucide: "book") }
                         }
                         Divider()
-                        Button(role: .destructive, action: onRemove) { Label("도안 빼기", systemImage: "trash") }
+                        Button(role: .destructive, action: onRemove) { Label("도안 빼기", lucide: "trash") }
                     } label: {
                         Text("변경")
                             .appFont(.subheadline)
@@ -502,8 +505,8 @@ struct PatternSection: View {
             if let ref = project.pattern {
                 Button(action: onOpen) {
                     HStack(spacing: 12) {
-                        Image(systemName: ref.kind == .pdf ? "doc.richtext" : "globe")
-                            .font(.system(size: 20))
+                        Image(lucide: ref.kind == .pdf ? "doc.richtext" : "globe")
+                            .iconSize(24)
                             .foregroundStyle(Theme.accentText)
                             .frame(width: 44, height: 44)
                             .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -517,7 +520,7 @@ struct PatternSection: View {
                         Spacer(minLength: 8)
                         HStack(spacing: 4) {
                             Text("보면서 뜨기")
-                            Image(systemName: "chevron.right").font(.system(size: 12))
+                            Image(lucide: "chevron.right").iconSize(14)
                         }
                         .appFont(.subheadline)
                         .foregroundStyle(Theme.accentText)
@@ -533,9 +536,9 @@ struct PatternSection: View {
                         .appFont(.subheadline)
                         .foregroundStyle(Theme.muted)
                     HStack(spacing: 8) {
-                        Button(action: onPickPDF) { Label("파일", systemImage: "doc.badge.plus") }
-                        PhotosPicker(selection: $photoItem, matching: .images) { Label("사진", systemImage: "photo") }
-                        Button(action: onAddWeb) { Label("웹 링크", systemImage: "link") }
+                        Button(action: onPickPDF) { Label("파일", lucide: "doc.badge.plus") }
+                        PhotosPicker(selection: $photoItem, matching: .images) { Label("사진", lucide: "photo") }
+                        Button(action: onAddWeb) { Label("웹 링크", lucide: "link") }
                     }
                     .buttonStyle(ChipStyle())
                 }

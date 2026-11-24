@@ -47,7 +47,7 @@ struct PhotoThumb: View {
             if let image {
                 Image(uiImage: image).resizable().scaledToFill()
             } else {
-                Image(systemName: "photo").foregroundStyle(Theme.muted)
+                Image(lucide: "photo").foregroundStyle(Theme.muted)
             }
         }
         .frame(width: size, height: size)
@@ -76,11 +76,11 @@ struct PhotosSection: View {
             SectionHeader(title: "사진") {
                 Menu {
                     if cameraAvailable {
-                        Button { showCamera = true } label: { Label("사진 찍기", systemImage: "camera") }
+                        Button { showCamera = true } label: { Label("사진 찍기", lucide: "camera") }
                     }
-                    Button { showPicker = true } label: { Label("앨범에서 고르기", systemImage: "photo.on.rectangle") }
+                    Button { showPicker = true } label: { Label("앨범에서 고르기", lucide: "photo.on.rectangle") }
                 } label: {
-                    Label("추가", systemImage: "plus")
+                    Label("추가", lucide: "plus")
                 }
                 .buttonStyle(ChipStyle())
             }
@@ -176,7 +176,7 @@ struct PhotoViewer: View {
                     circleButton("xmark", label: "닫기") { saveCaption(); dismiss() }
                     Spacer()
                     if let photo { ShareLink(item: Image(uiImage: PhotoFiles.full(photo.fileName) ?? UIImage()), preview: SharePreview("뜨개 사진")) {
-                        Image(systemName: "square.and.arrow.up").frame(width: 44, height: 44)
+                        Image(lucide: "square.and.arrow.up").frame(width: 44, height: 44)
                     }
                     .foregroundStyle(.white)
                     .background(.white.opacity(0.15), in: Circle())
@@ -220,7 +220,7 @@ struct PhotoViewer: View {
 
     private func circleButton(_ symbol: String, label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Image(systemName: symbol).frame(width: 44, height: 44)
+            Image(lucide: symbol).frame(width: 44, height: 44)
         }
         .foregroundStyle(.white)
         .background(.white.opacity(0.15), in: Circle())
@@ -260,7 +260,7 @@ struct ZoomablePhoto: View {
                     .onTapGesture(count: 2) { withAnimation { scale = 1; base = 1 } }
             } else {
                 VStack(spacing: 8) {
-                    Image(systemName: "photo").font(.largeTitle)
+                    Image(lucide: "photo").iconSize(40)
                     Text("사진 파일이 없어요").appFont(.body)
                 }
                 .foregroundStyle(.white.opacity(0.6))

@@ -19,7 +19,7 @@ extension Color {
 }
 
 enum Theme {
-    static let bg = Color(light: 0xFFFFFF, dark: 0x1B1613)
+    static let bg = Color(light: 0xFBF8F5, dark: 0x1B1613)
     static let surface = Color(light: 0xFFFFFF, dark: 0x251F1A)
     static let surface2 = Color(light: 0xEFE5D9, dark: 0x322921)
     static let line = Color(light: 0xE5D7C8, dark: 0x3B3129)
@@ -262,7 +262,7 @@ struct EmptyStateView: View {
             }
             if let buttonTitle, let action {
                 Button(action: action) {
-                    Label(buttonTitle, systemImage: buttonIcon)
+                    Label(buttonTitle, lucide: buttonIcon)
                         .appFont(.headline)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 12)

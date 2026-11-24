@@ -10,7 +10,7 @@ struct RecordSection: View {
         VStack(alignment: .leading, spacing: 10) {
             SectionHeader(title: "제작 기록") {
                 Button(action: onEdit) {
-                    if project.hasRecord { Text("편집") } else { Label("기록하기", systemImage: "plus") }
+                    if project.hasRecord { Text("편집") } else { Label("기록하기", lucide: "plus") }
                 }
                 .buttonStyle(ChipStyle())
             }
@@ -44,8 +44,8 @@ struct RecordCard: View {
 
     private func row(_ symbol: String, _ title: String, _ lines: [String]) -> some View {
         HStack(alignment: .top, spacing: 10) {
-            Image(systemName: symbol)
-                .font(.system(size: 15))
+            Image(lucide: symbol)
+                .iconSize(18)
                 .foregroundStyle(Theme.accentText)
                 .frame(width: 22)
                 .padding(.top, 2)
@@ -78,60 +78,44 @@ struct RecordEditSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    LabeledContent("코 수") {
-                        NumberField(placeholder: "예: 22", value: $gauge.stitches).multilineTextAlignment(.trailing)
-                    }
-                    LabeledContent("단 수") {
-                        NumberField(placeholder: "예: 30", value: $gauge.rows).multilineTextAlignment(.trailing)
-                    }
-                    TextField("바늘 (예: 4mm 대바늘)", text: $gauge.needle)
-                } header: {
-                    Text("게이지 (10cm 기준)")
+            AppForm {
+                FormSection(title: "게이지 (10cm 기준)") {
+                    InlineNumberRow(label: "코 수", placeholder: "예: 22", value: $gauge.stitches, suffix: "코")
+                    InlineNumberRow(label: "단 수", placeholder: "예: 30", value: $gauge.rows, suffix: "단")
+                    AppTextField("바늘 (예: 4mm 대바늘)", text: $gauge.needle)
                 }
 
-                Section {
+                FormSection(title: "사용한 실과 실제 사용량") {
                     ForEach($yarns) { $y in
+                        if y.id != yarns.first?.id { FormDivider() }
                         VStack(alignment: .leading, spacing: 8) {
-                            TextField("실 이름 (예: 메리노 울)", text: $y.name)
                             HStack(spacing: 8) {
-                                TextField("색 (예: 그레이)", text: $y.color)
-                                TextField("양", text: Binding(
+                                AppTextField("실 이름 (예: 메리노 울)", text: $y.name)
+                                RemoveRowButton(label: "실 삭제") {
+                                    let id = y.id
+                                    yarns.removeAll { $0.id == id }
+                                }
+                            }
+                            AppTextField("색 (예: 그레이)", text: $y.color)
+                            HStack(spacing: 8) {
+                                TextField("", text: Binding(
                                     get: { y.amount == 0 ? "" : (y.amount.rounded() == y.amount ? String(Int(y.amount)) : String(y.amount)) },
                                     set: { y.amount = Double($0.replacingOccurrences(of: ",", with: ".").filter { "0123456789.".contains($0) }) ?? 0 }
-                                ))
+                                ), prompt: Text(verbatim: "양").foregroundStyle(Theme.muted.opacity(0.75)))
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
-                                .frame(width: 64)
-                                Picker("단위", selection: $y.unit) {
-                                    Text("볼").tag("볼")
-                                    Text("g").tag("g")
-                                    Text("m").tag("m")
-                                }
-                                .labelsHidden()
-                                .fixedSize()
+                                .fieldBox()
+                                ChoiceChips(selection: $y.unit, options: [("볼", "볼"), ("g", "g"), ("m", "m")])
                             }
                         }
-                        .padding(.vertical, 4)
                     }
-                    .onDelete { yarns.remove(atOffsets: $0) }
-                    Button {
-                        yarns.append(YarnUse())
-                    } label: {
-                        Label("실 추가", systemImage: "plus")
-                    }
-                } header: {
-                    Text("사용한 실과 실제 사용량")
-                } footer: {
-                    Text("왼쪽으로 밀면 삭제돼요.")
+                    AddRowButton(title: "실 추가") { yarns.append(YarnUse()) }
                 }
 
-                Section("사이즈·수정 사항") {
-                    TextEditor(text: $sizeNote).frame(minHeight: 90)
+                FormSection(title: "사이즈·수정 사항") {
+                    AppTextField("예: 소매 길이 2cm 늘림", text: $sizeNote, lines: 3...10)
                 }
             }
-            .scrollDismissesKeyboard(.interactively)
             .navigationTitle("제작 기록")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

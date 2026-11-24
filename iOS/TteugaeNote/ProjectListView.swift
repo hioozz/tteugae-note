@@ -76,9 +76,9 @@ struct ProjectListView: View {
                     .appFont(.subheadline)
                     .foregroundStyle(Theme.muted)
                 HStack(spacing: 8) {
-                    Button { showLibrary = true } label: { Label("도안함", systemImage: "book") }
-                    Button { showStash = true } label: { Label("보관함", systemImage: "shippingbox") }
-                    Button { showDone = true } label: { Label("완성작 \(done.count)", systemImage: "checkmark.seal") }
+                    Button { showLibrary = true } label: { Label("도안함", lucide: "book") }
+                    Button { showStash = true } label: { Label("보관함", lucide: "shippingbox") }
+                    Button { showDone = true } label: { Label("완성작 \(done.count)", lucide: "checkmark.seal") }
                 }
                 .buttonStyle(ChipStyle())
 
@@ -88,7 +88,7 @@ struct ProjectListView: View {
                                    buttonTitle: "새 작품 만들기",
                                    action: { showNew = true },
                                    secondary: done.isEmpty ? nil : AnyView(
-                                    Button { showDone = true } label: { Label("완성한 작품 보기", systemImage: "checkmark.seal") }
+                                    Button { showDone = true } label: { Label("완성한 작품 보기", lucide: "checkmark.seal") }
                                         .buttonStyle(ChipStyle())
                                    ))
                         .padding(.top, 50)
@@ -107,11 +107,7 @@ struct ProjectListView: View {
         EmptyStateView(title: "첫 작품을 시작해 보세요",
                        message: "단수를 세고, 반복 작업을 알려주고,\n실과 바늘 정보도 함께 기억해 둘게요.",
                        buttonTitle: "새 작품 만들기",
-                       action: { showNew = true },
-                       secondary: AnyView(
-                        Button { showLibrary = true } label: { Label(store.patterns.isEmpty ? "도안함" : "도안함에서 시작", systemImage: "book") }
-                            .buttonStyle(ChipStyle())
-                       ))
+                       action: { showNew = true })
     }
 
     @ToolbarContentBuilder
@@ -121,22 +117,31 @@ struct ProjectListView: View {
                 Button {
                     exportDoc = BackupDocument(data: store.exportData())
                     showExporter = true
-                } label: { Label("백업 내보내기", systemImage: "square.and.arrow.up") }
+                } label: { Label("백업 내보내기", lucide: "square.and.arrow.up") }
                 Button { showImporter = true } label: {
-                    Label("백업 가져오기", systemImage: "square.and.arrow.down")
+                    Label("백업 가져오기", lucide: "square.and.arrow.down")
                 }
                 Divider()
-                Button { showStash = true } label: { Label("실·바늘 보관함", systemImage: "shippingbox") }
-                Button { showLibrary = true } label: { Label("도안함", systemImage: "book") }
-                Button { showDone = true } label: { Label("완성한 작품", systemImage: "checkmark.seal") }
-                Button { showSettings = true } label: { Label("설정", systemImage: "gearshape") }
+                Button { showSettings = true } label: { Label("설정", lucide: "gearshape") }
             } label: {
-                Image(systemName: "ellipsis.circle")
+                Image(lucide: "gearshape")
             }
-            .accessibilityLabel("더보기")
+            .accessibilityLabel("설정과 백업")
         }
-        ToolbarItem(placement: .topBarTrailing) {
-            Button { showNew = true } label: { Label("새 작품", systemImage: "plus") }
+        if !store.projects.isEmpty {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button { showNew = true } label: {
+                    HStack(spacing: 4) {
+                        Image(lucide: "plus")
+                        Text("새 작품")
+                    }
+                    .appFont(.subheadline)
+                    .foregroundStyle(Theme.accentInk)
+                    .fixedSize()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(Theme.accent)
+            }
         }
     }
 

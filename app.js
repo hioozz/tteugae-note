@@ -10,33 +10,34 @@ const $app = document.getElementById('app');
 const $toast = document.getElementById('toast');
 
 /* ---------- 아이콘 ---------- */
+// Lucide 아이콘 (https://lucide.dev, ISC 라이선스) — 키 이름은 앱 안에서 쓰는 별명
 const ICON = {
-  back: '<path d="M15 18l-6-6 6-6"/>',
-  edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
-  plus: '<path d="M12 5v14M5 12h14"/>',
-  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
-  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
-  trash: '<path d="M3 6h18"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>',
-  link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
-  check: '<path d="M20 6 9 17l-5-5"/>',
-  more: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
-  doc: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/>',
-  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/>',
-  external: '<path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>',
-  marker: '<path d="M9 11l-5 5v4h4l5-5"/><path d="M14 6l4 4"/><path d="M9 11l6-6a2.8 2.8 0 0 1 4 4l-6 6z"/>',
-  chev: '<path d="M9 6l6 6-6 6"/>',
-  pause: '<path d="M9 5v14M15 5v14"/>',
-  play: '<path d="M7 5l12 7-12 7z"/>',
-  book: '<path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v13"/>',
-  pen: '<path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/>',
-  eraser: '<path d="M20 20H9l-5-5a2 2 0 0 1 0-3l8-8a2 2 0 0 1 3 0l5 5a2 2 0 0 1 0 3l-8 8"/><path d="M9 9l6 6"/>',
-  box: '<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/>',
-  needle: '<path d="M5 19L19 5"/><circle cx="18" cy="6" r="1.2"/>',
-  camera: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/>',
-  next: '<path d="M9 6l6 6-6 6"/>',
-  prev: '<path d="M15 6l-6 6 6 6"/>',
-  close: '<path d="M6 6l12 12M18 6L6 18"/>',
-  ink: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/><path d="M15 5l4 4"/>',
+  back: '<path d="m15 18-6-6 6-6"/>', // chevron-left
+  edit: '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>', // pencil
+  plus: '<path d="M5 12h14"/><path d="M12 5v14"/>', // plus
+  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>', // bell
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/>', // undo-2
+  trash: '<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>', // trash-2
+  link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>', // link
+  check: '<path d="M20 6 9 17l-5-5"/>', // check
+  more: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>', // ellipsis
+  doc: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>', // file-text
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>', // globe
+  external: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>', // external-link
+  marker: '<path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>', // highlighter
+  chev: '<path d="m9 18 6-6-6-6"/>', // chevron-right
+  pause: '<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>', // pause
+  play: '<polygon points="6 3 20 12 6 21 6 3"/>', // play
+  book: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>', // book-open
+  pen: '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>', // pen
+  eraser: '<path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/>', // eraser
+  box: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>', // package
+  needle: '<path d="M22 2 2 22"/>', // slash
+  camera: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>', // camera
+  next: '<path d="m9 18 6-6-6-6"/>', // chevron-right
+  prev: '<path d="m15 18-6-6 6-6"/>', // chevron-left
+  close: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>', // x
+  ink: '<path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/>', // pen-line
 };
 const icon = (name, size = 20) =>
   `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[name]}</svg>`;
@@ -1104,17 +1105,13 @@ function renderList() {
       ${items.map(cardHTML).join('') || `<li>${emptyStateHTML({ title: '지금 뜨는 작품이 없어요', message: '새 작품을 시작하거나<br>도안함에 저장해 둔 도안으로 바로 시작해 보세요.', button: `<a class="btn-primary wobbly" href="#/p/new">${icon('plus', 18)} 새 작품 만들기</a>${done.length ? `<a class="chip" href="#/done">${icon('check', 16)} 완성한 작품 보기</a>` : ''}`, cls: 'tab-empty' })}</li>`}
     </ul>
   ` : `
-    ${emptyStateHTML({ title: '첫 작품을 시작해 보세요', message: '단수를 세고, 반복 작업을 알려주고,<br>실과 바늘 정보도 함께 기억해 둘게요.', button: `<a class="btn-primary wobbly" href="#/p/new">${icon('plus', 18)} 새 작품 만들기</a><a class="chip" href="#/patterns">${icon('book', 16)} 도안함</a>` })}
+    ${emptyStateHTML({ title: '첫 작품을 시작해 보세요', message: '단수를 세고, 반복 작업을 알려주고,<br>실과 바늘 정보도 함께 기억해 둘게요.', button: `<a class="btn-primary wobbly" href="#/p/new">${icon('plus', 18)} 새 작품 만들기</a>` })}
   `}
 
   <footer class="foot">
     <button class="link-btn" data-action="export">백업 내보내기</button>
     <span aria-hidden="true">·</span>
     <label class="link-btn">백업 가져오기<input type="file" accept="application/json,.json" data-action="import" hidden></label>
-    <span aria-hidden="true">·</span>
-    <a class="link-btn" href="#/stash">실·바늘 보관함</a>
-    <span aria-hidden="true">·</span>
-    <a class="link-btn" href="#/done">완성한 작품</a>
     <span aria-hidden="true">·</span>
     <button class="link-btn" data-action="settings">설정</button>
   </footer>`;

@@ -46,7 +46,7 @@ struct StashView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
                         if tab == .yarn { editingYarn = StashYarn() } else { editingNeedle = StashNeedle() }
-                    } label: { Label(tab == .yarn ? "실 추가" : "바늘 추가", systemImage: "plus") }
+                    } label: { Label(tab == .yarn ? "실 추가" : "바늘 추가", lucide: "plus") }
                 }
             }
             .sheet(item: $editingYarn) { YarnEditSheet(yarn: $0) }
@@ -112,7 +112,7 @@ struct YarnStashCard: View {
             HStack(alignment: .firstTextBaseline) {
                 Text(yarn.title.isEmpty ? "실" : yarn.title).appFont(.headline)
                 if !yarn.photo.isEmpty {
-                    Image(systemName: "camera").font(.system(size: 13)).foregroundStyle(Theme.muted)
+                    Image(lucide: "camera").iconSize(16).foregroundStyle(Theme.muted)
                         .accessibilityLabel("사진 있음")
                 }
                 Spacer()
@@ -168,72 +168,55 @@ struct YarnEditSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
+            AppForm {
+                FormSection(title: "사진") {
                     if !yarn.photo.isEmpty {
-                        Button { viewingPhoto = true } label: { YarnPhotoLarge(fileName: yarn.photo) }
-                            .buttonStyle(.plain)
-                            .listRowInsets(EdgeInsets())
-                            .accessibilityLabel("실 사진 크게 보기")
+                        HStack(spacing: 14) {
+                            photoMenu(label: "바꾸기", icon: false)
+                            Button("삭제") { yarn.photo = "" }
+                                .foregroundStyle(Theme.danger)
+                        }
+                    }
+                } content: {
+                    if !yarn.photo.isEmpty {
+                        Button { viewingPhoto = true } label: {
+                            YarnPhotoLarge(fileName: yarn.photo)
+                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("실 사진 크게 보기")
                     } else {
                         photoMenu(label: "사진 넣기")
-                    }
-                } header: {
-                    HStack {
-                        Text("사진")
-                        Spacer()
-                        if !yarn.photo.isEmpty {
-                            HStack(spacing: 14) {
-                                photoMenu(label: "바꾸기", icon: false)
-                                Button("삭제", role: .destructive) { yarn.photo = "" }
-                                    .foregroundStyle(Theme.danger)
-                            }
-                            .appFont(.subheadline)
-                            .textCase(nil)
-                        }
+                            .buttonStyle(ChipStyle())
                     }
                 }
-                Section {
-                    TextField("실 이름 (예: 메리노 울)", text: $yarn.name)
-                    TextField("색 (예: 그레이)", text: $yarn.color)
-                    TextField("굵기 (선택, 예: DK, 합사)", text: $yarn.weight)
+                FormSection(title: "실") {
+                    AppTextField("실 이름 (예: 메리노 울)", text: $yarn.name)
+                    AppTextField("색 (예: 그레이)", text: $yarn.color)
+                    AppTextField("굵기 (선택, 예: DK, 합사)", text: $yarn.weight)
                 }
-                Section {
-                    HStack {
-                        Text("가진 양")
-                        Spacer()
+                FormSection(title: "가진 양", footer: "작품에 연결한 양은 자동으로 빼서 ‘남은 양’으로 보여 줘요.") {
+                    HStack(spacing: 10) {
                         DecimalField(placeholder: "0", value: $yarn.amount)
                             .multilineTextAlignment(.trailing)
-                            .frame(width: 80)
-                        Picker("단위", selection: $yarn.unit) {
-                            Text("볼").tag("볼"); Text("g").tag("g"); Text("m").tag("m")
-                        }
-                        .labelsHidden()
-                        .fixedSize()
+                            .fieldBox()
+                        ChoiceChips(selection: $yarn.unit, options: [("볼", "볼"), ("g", "g"), ("m", "m")])
                     }
-                } footer: {
-                    Text("작품에 연결한 양은 자동으로 빼서 ‘남은 양’으로 보여 줘요.")
                 }
-                Section {
-                    HStack {
-                        Text("권장 바늘")
-                        Spacer()
-                        TextField("예: 4, 3.5~4", text: $yarn.needleSize)
+                FormSection(title: "권장 바늘", footer: "실 라벨에 적힌 바늘 굵기를 mm나 호수로 적어 두세요.") {
+                    HStack(spacing: 10) {
+                        TextField("", text: $yarn.needleSize, prompt: Text(verbatim: "예: 4, 3.5~4").foregroundStyle(Theme.muted.opacity(0.75)))
                             .keyboardType(.numbersAndPunctuation)
                             .multilineTextAlignment(.trailing)
-                            .frame(width: 110)
-                        Picker("단위", selection: $yarn.needleUnit) {
-                            Text("mm").tag("mm"); Text("호").tag("호")
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(width: 96)
+                            .fieldBox()
+                        ChoiceChips(selection: $yarn.needleUnit, options: [("mm", "mm"), ("호", "호")])
                     }
-                } footer: {
-                    Text(verbatim: "실 라벨에 적힌 바늘 굵기를 mm나 호수로 적어 두세요.")
                 }
-                Section("메모") { TextField("예: 세일 때 구매, 로트 번호", text: $yarn.note, axis: .vertical) }
+                FormSection(title: "메모") {
+                    AppTextField("예: 세일 때 구매, 로트 번호", text: $yarn.note, lines: 2...6)
+                }
                 if !isNew {
-                    Section { Button("이 실 삭제", role: .destructive) { confirmDelete = true } }
+                    DangerButton(title: "이 실 삭제") { confirmDelete = true }
                 }
             }
             .navigationTitle(isNew ? "실 추가" : "실 정보")
@@ -270,11 +253,11 @@ struct YarnEditSheet: View {
     private func photoMenu(label: String, icon: Bool = true) -> some View {
         Menu {
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                Button { showCamera = true } label: { Label("사진 찍기", systemImage: "camera") }
+                Button { showCamera = true } label: { Label("사진 찍기", lucide: "camera") }
             }
-            PhotosPicker(selection: $photoItem, matching: .images) { Label("앨범에서 고르기", systemImage: "photo.on.rectangle") }
+            PhotosPicker(selection: $photoItem, matching: .images) { Label("앨범에서 고르기", lucide: "photo.on.rectangle") }
         } label: {
-            if icon { Label(label, systemImage: "camera") } else { Text(label) }
+            if icon { Label(label, lucide: "camera") } else { Text(label) }
         }
     }
 
@@ -299,7 +282,7 @@ struct SinglePhotoViewer: View {
                 Text(title).appFont(.headline).foregroundStyle(.white).lineLimit(1)
                 Spacer()
                 Button { dismiss() } label: {
-                    Image(systemName: "xmark").font(.system(size: 17)).frame(width: 44, height: 44)
+                    Image(lucide: "xmark").iconSize(20).frame(width: 44, height: 44)
                         .background(.white.opacity(0.15), in: Circle())
                 }
                 .foregroundStyle(.white)
@@ -324,17 +307,17 @@ struct NeedleEditSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    Picker("종류", selection: $needle.kind) {
-                        ForEach(["대바늘", "줄바늘", "코바늘", "기타"], id: \.self) { Text($0).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
-                    TextField("크기 (예: 4.5mm, 80cm)", text: $needle.size)
+            AppForm {
+                FormSection(title: "바늘") {
+                    ChoiceChips(selection: $needle.kind,
+                                options: ["대바늘", "줄바늘", "코바늘", "기타"].map { ($0, $0) }, fill: true)
+                    AppTextField("크기 (예: 4.5mm, 80cm)", text: $needle.size)
                 }
-                Section("메모") { TextField("예: 대나무, 2세트", text: $needle.note, axis: .vertical) }
+                FormSection(title: "메모") {
+                    AppTextField("예: 대나무, 2세트", text: $needle.note, lines: 2...6)
+                }
                 if !isNew {
-                    Section { Button("이 바늘 삭제", role: .destructive) { confirmDelete = true } }
+                    DangerButton(title: "이 바늘 삭제") { confirmDelete = true }
                 }
             }
             .navigationTitle(isNew ? "바늘 추가" : "바늘 정보")
@@ -363,7 +346,7 @@ struct MaterialsSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionHeader(title: "재료") {
-                Button(action: onPick) { Label("보관함에서 고르기", systemImage: "shippingbox") }
+                Button(action: onPick) { Label("보관함에서 고르기", lucide: "shippingbox") }
                     .buttonStyle(ChipStyle())
             }
             let links = project.yarnLinks.compactMap { l in store.yarn(l.yarnID).map { (l, $0) } }
@@ -393,7 +376,7 @@ struct MaterialsSection: View {
                     }
                     if !needles.isEmpty {
                         HStack(spacing: 6) {
-                            Image(systemName: "line.diagonal").foregroundStyle(Theme.accentText)
+                            Image(lucide: "line.diagonal").foregroundStyle(Theme.accentText)
                             Text(needles.map(\.title).joined(separator: ", ")).appFont(.body)
                         }
                     }
@@ -423,16 +406,17 @@ struct MaterialPickerSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
+            AppForm {
+                FormSection(title: "이 작품에 쓸 실", footer: "쓸 양을 적으면 연결되고, 비우면 연결이 풀려요.") {
                     if store.stash.yarns.isEmpty {
-                        Text("보관함에 실이 없어요.").foregroundStyle(.secondary)
+                        Text("보관함에 실이 없어요.").appFont(.body).foregroundStyle(Theme.muted)
                     }
-                    ForEach(store.stash.yarns) { y in
-                        HStack {
+                    ForEach(Array(store.stash.yarns.enumerated()), id: \.element.id) { i, y in
+                        if i > 0 { FormDivider() }
+                        HStack(spacing: 8) {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(y.title.isEmpty ? "실" : y.title)
-                                Text("가진 \(amountString(y.amount))\(y.unit)").appFont(.caption).foregroundStyle(.secondary)
+                                Text(y.title.isEmpty ? "실" : y.title).appFont(.body)
+                                Text("가진 \(amountString(y.amount))\(y.unit)").appFont(.caption).foregroundStyle(Theme.muted)
                             }
                             Spacer()
                             DecimalField(placeholder: "0", value: Binding(
@@ -441,31 +425,25 @@ struct MaterialPickerSheet: View {
                             ))
                             .multilineTextAlignment(.trailing)
                             .frame(width: 64)
-                            .padding(.vertical, 6)
-                            .padding(.horizontal, 8)
-                            .background(Theme.surface2, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-                            Text(y.unit).foregroundStyle(.secondary)
+                            .fieldBox(vertical: 8)
+                            Text(y.unit).appFont(.body).foregroundStyle(Theme.muted)
                         }
                     }
-                } header: {
-                    Text("이 작품에 쓸 실")
-                } footer: {
-                    Text("쓸 양을 적으면 연결되고, 비우면 연결이 풀려요.")
                 }
-                Section("이 작품에 쓸 바늘") {
+                FormSection(title: "이 작품에 쓸 바늘") {
                     if store.stash.needles.isEmpty {
-                        Text("보관함에 바늘이 없어요.").foregroundStyle(.secondary)
+                        Text("보관함에 바늘이 없어요.").appFont(.body).foregroundStyle(Theme.muted)
                     }
-                    ForEach(store.stash.needles) { n in
-                        Toggle(n.title, isOn: Binding(
+                    ForEach(Array(store.stash.needles.enumerated()), id: \.element.id) { i, n in
+                        if i > 0 { FormDivider() }
+                        ToggleRow(title: n.title, isOn: Binding(
                             get: { needleIDs.contains(n.id) },
                             set: { if $0 { needleIDs.insert(n.id) } else { needleIDs.remove(n.id) } }
                         ))
                     }
                 }
-                Section {
-                    Button { showStash = true } label: { Label("보관함 열기 (실·바늘 추가)", systemImage: "shippingbox") }
-                }
+                Button { showStash = true } label: { Label("보관함 열기 (실·바늘 추가)", lucide: "shippingbox") }
+                    .buttonStyle(ChipStyle())
             }
             .navigationTitle("보관함에서 고르기")
             .navigationBarTitleDisplayMode(.inline)
@@ -503,7 +481,7 @@ struct YarnPhotoLarge: View {
             if let image {
                 Image(uiImage: image).resizable().scaledToFill()
             } else {
-                Image(systemName: "photo").foregroundStyle(Theme.muted)
+                Image(lucide: "photo").foregroundStyle(Theme.muted)
             }
         }
         .frame(height: 220)

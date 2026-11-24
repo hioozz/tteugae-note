@@ -27,13 +27,13 @@ struct GuideCard: View {
                     Pill(text: "총 \(g.total)코", fg: Theme.text, bg: Theme.surface2).appFont(.caption)
                 }
                 Menu {
-                    Button(action: onEdit) { Label("안내 고치기", systemImage: "pencil") }
-                    if let onReread { Button(action: onReread) { Label("도안에서 다시 읽기", systemImage: "doc.text.viewfinder") } }
-                    if let onSaveToLibrary { Button(action: onSaveToLibrary) { Label("도안함에 저장", systemImage: "book") } }
+                    Button(action: onEdit) { Label("안내 고치기", lucide: "pencil") }
+                    if let onReread { Button(action: onReread) { Label("도안에서 다시 읽기", lucide: "doc.text.viewfinder") } }
+                    if let onSaveToLibrary { Button(action: onSaveToLibrary) { Label("도안함에 저장", lucide: "book") } }
                     Divider()
-                    Button(role: .destructive, action: onClear) { Label("안내 지우기", systemImage: "trash") }
+                    Button(role: .destructive, action: onClear) { Label("안내 지우기", lucide: "trash") }
                 } label: {
-                    Image(systemName: "ellipsis").frame(width: 32, height: 28).contentShape(Rectangle())
+                    Image(lucide: "ellipsis").frame(width: 32, height: 28).contentShape(Rectangle())
                 }
                 .foregroundStyle(Theme.muted)
                 .accessibilityLabel("도안 안내 설정")
@@ -48,7 +48,7 @@ struct GuideCard: View {
                             ZStack {
                                 Circle().fill(i < current ? Theme.accentText.opacity(0.45) : i == current ? Theme.accentText : Theme.surface2)
                                 if i < current {
-                                    Image(systemName: "checkmark").font(.system(size: 10, weight: .bold)).foregroundStyle(Theme.surface)
+                                    Image(lucide: "checkmark").iconSize(12).foregroundStyle(Theme.surface)
                                 } else {
                                     Text("\(i + 1)").appFont(size: 11, relativeTo: .caption2)
                                         .foregroundStyle(i == current ? Theme.surface : Theme.muted)
@@ -69,7 +69,7 @@ struct GuideCard: View {
 
                 HStack(spacing: 8) {
                     Button { onMove(-1) } label: {
-                        Image(systemName: "arrow.uturn.backward").frame(width: 52, height: 52)
+                        Image(lucide: "arrow.uturn.backward").frame(width: 52, height: 52)
                     }
                     .buttonStyle(PressStyle(bg: Theme.surface2, fg: Theme.text, radius: 16))
                     .disabled(current == 0)
@@ -77,7 +77,7 @@ struct GuideCard: View {
 
                     Button { onMove(1) } label: {
                         Label(current + 1 >= steps.count ? "\(rowNumber)단 끝 · 다음 단으로" : "다음 단계",
-                              systemImage: current + 1 >= steps.count ? "checkmark" : "chevron.right")
+                              lucide: current + 1 >= steps.count ? "checkmark" : "chevron.right")
                             .labelStyle(TrailingIconLabelStyle())
                             .appFont(.headline)
                             .frame(maxWidth: .infinity)
@@ -151,75 +151,64 @@ struct GuideImportSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
+            AppForm {
                 if !editing {
-                    Section {
+                    FormSection(title: "도안에서 찾았어요",
+                                footer: "글자를 잘못 읽었을 수 있어요. 도안과 한 번 비교해 보고 고쳐 주세요. 쉼표(,)마다 한 단계로 나눠서 보여 줘요.") {
                         if result.parts.count > 1 {
-                            Picker("셀 부분", selection: $partIndex) {
-                                ForEach(result.parts.indices, id: \.self) { i in
-                                    Text("\(result.parts[i].name) (\(result.parts[i].rows.map(\.to).max() ?? 0)단)").tag(i)
+                            LabeledField(label: "셀 부분") {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    ChoiceChips(selection: $partIndex, options: result.parts.indices.map { i in
+                                        (i, "\(result.parts[i].name) (\(result.parts[i].rows.map(\.to).max() ?? 0)단)")
+                                    })
                                 }
                             }
+                        } else {
+                            Text("\(result.parts.first?.name ?? "도안") · \(maxRow)단")
+                                .appFont(.body)
                         }
-                    } header: {
-                        Text("도안에서 찾았어요")
-                    } footer: {
-                        Text("글자를 잘못 읽었을 수 있어요. 도안과 한 번 비교해 보고 고쳐 주세요. 쉼표(,)마다 한 단계로 나눠서 보여 줘요.")
                     }
                 }
 
                 if editing || manual {
-                    Section {
-                        TextField("", text: $bulk, prompt: Text(verbatim: "1단: 사슬5, 기둥코2, 짧은뜨기1*4 (총5)\n2단: 사슬2, 짧은뜨기1, 짧은뜨기 늘려\n3~10단: 사슬2, 짧은뜨기1*5"), axis: .vertical)
-                            .lineLimit(3...10)
-                        Button {
+                    FormSection(title: "글로 한꺼번에 넣기",
+                                footer: bulkMessage ?? "한 줄에 한 단씩 ‘1단: 사슬2, 짧은뜨기1*5’, ‘3~10단: …’처럼 적거나 붙여 넣고 나누기를 누르세요. 아래에서 한 단씩 적어도 돼요.") {
+                        AppTextField("1단: 사슬5, 기둥코2, 짧은뜨기1*4 (총5)\n2단: 사슬2, 짧은뜨기1, 짧은뜨기 늘려\n3~10단: 사슬2, 짧은뜨기1*5", text: $bulk, lines: 3...10)
+                        InlineActionButton(title: "단별로 나누기", systemImage: "text.line.first.and.arrowtriangle.forward") {
                             splitBulk()
-                        } label: {
-                            Label("단별로 나누기", systemImage: "text.line.first.and.arrowtriangle.forward")
                         }
                         .disabled(bulk.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    } header: {
-                        Text("글로 한꺼번에 넣기")
-                    } footer: {
-                        Text(verbatim: bulkMessage ?? "한 줄에 한 단씩 ‘1단: 사슬2, 짧은뜨기1*5’, ‘3~10단: …’처럼 적거나 붙여 넣고 나누기를 누르세요. 아래에서 한 단씩 적어도 돼요.")
                     }
                 }
 
-                Section {
+                FormSection(title: "단별 안내") {
                     ForEach($rows) { $r in
-                        GuideRowEditor(row: $r)
-                    }
-                    .onDelete { rows.remove(atOffsets: $0) }
-                    Button {
-                        let n = maxRow + 1
-                        rows.append(GuideRow(from: n, to: n, text: ""))
-                    } label: {
-                        Label("단 추가", systemImage: "plus")
-                    }
-                } header: {
-                    Text("단별 안내")
-                }
-
-                Section {
-                    if maxRow > 0 {
-                        Toggle("목표 단수를 \(maxRow)단으로", isOn: $setTarget)
-                    }
-                    if !editing && canFill {
-                        Toggle(isOn: $fillYarn) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("실·바늘 칸 채우기")
-                                Text([result.yarn, result.needle].filter { !$0.isEmpty }.joined(separator: " · "))
-                                    .appFont(.caption).foregroundStyle(Theme.muted)
-                            }
+                        if r.id != rows.first?.id { FormDivider() }
+                        GuideRowEditor(row: $r) {
+                            let id = r.id
+                            rows.removeAll { $0.id == id }
                         }
                     }
-                    if !editing && !others.isEmpty {
-                        Toggle(isOn: $noteOthers) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("나머지 부분은 메모에 붙이기")
-                                Text(others.map(\.name).joined(separator: ", "))
-                                    .appFont(.caption).foregroundStyle(Theme.muted)
-                            }
+                    AddRowButton(title: "단 추가") {
+                        let n = maxRow + 1
+                        rows.append(GuideRow(from: n, to: n, text: ""))
+                    }
+                }
+
+                if maxRow > 0 || (!editing && canFill) || (!editing && !others.isEmpty) {
+                    FormSection {
+                        if maxRow > 0 {
+                            ToggleRow(title: "목표 단수를 \(maxRow)단으로", isOn: $setTarget)
+                        }
+                        if !editing && canFill {
+                            ToggleRow(title: "실·바늘 칸 채우기",
+                                      detail: [result.yarn, result.needle].filter { !$0.isEmpty }.joined(separator: " · "),
+                                      isOn: $fillYarn)
+                        }
+                        if !editing && !others.isEmpty {
+                            ToggleRow(title: "나머지 부분은 메모에 붙이기",
+                                      detail: others.map(\.name).joined(separator: ", "),
+                                      isOn: $noteOthers)
                         }
                     }
                 }
@@ -286,29 +275,28 @@ struct GuideImportSheet: View {
 
 private struct GuideRowEditor: View {
     @Binding var row: GuideRow
+    var onRemove: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 4) {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
                 NumberField(placeholder: "단", value: Binding(get: { row.from }, set: { row.from = max(1, $0); if row.to < row.from { row.to = row.from } }))
-                    .frame(width: 44)
                     .multilineTextAlignment(.center)
-                    .padding(.vertical, 4)
-                    .background(Theme.surface2, in: RoundedRectangle(cornerRadius: 8))
+                    .frame(width: 44)
+                    .fieldBox(vertical: 6)
                 Text("~").foregroundStyle(Theme.muted)
                 NumberField(placeholder: "단", value: Binding(get: { row.to }, set: { row.to = $0 }))
-                    .frame(width: 44)
                     .multilineTextAlignment(.center)
-                    .padding(.vertical, 4)
-                    .background(Theme.surface2, in: RoundedRectangle(cornerRadius: 8))
-                Text("단").foregroundStyle(Theme.muted)
+                    .frame(width: 44)
+                    .fieldBox(vertical: 6)
+                Text("단").appFont(.body).foregroundStyle(Theme.muted)
                 Spacer()
                 if row.total > 0 {
                     Text("총 \(row.total)코").appFont(.caption).foregroundStyle(Theme.muted)
                 }
+                RemoveRowButton(label: "\(row.label) 삭제", action: onRemove)
             }
-            TextField("", text: $row.text, prompt: Text(verbatim: "뜨는 방법 (예: 사슬2, 짧은뜨기1*5)"), axis: .vertical)
-                .lineLimit(1...4)
+            AppTextField("뜨는 방법 (예: 사슬2, 짧은뜨기1*5)", text: $row.text, lines: 1...4)
             let steps = row.steps
             if steps.count > 1 {
                 Text(steps.joined(separator: "  →  "))
@@ -316,6 +304,5 @@ private struct GuideRowEditor: View {
                     .foregroundStyle(Theme.muted)
             }
         }
-        .padding(.vertical, 2)
     }
 }

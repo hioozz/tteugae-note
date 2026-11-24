@@ -94,7 +94,7 @@ struct DoneCard: View {
 
     private func line(_ symbol: String, _ text: String) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
-            Image(systemName: symbol).font(.system(size: 13)).foregroundStyle(Theme.accentText).frame(width: 18)
+            Image(lucide: symbol).iconSize(16).foregroundStyle(Theme.accentText).frame(width: 18)
             Text(text).appFont(.subheadline).lineLimit(3)
         }
     }

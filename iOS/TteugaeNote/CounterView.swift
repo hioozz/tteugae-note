@@ -268,7 +268,7 @@ struct CounterView: View {
         VStack(spacing: 10) {
             HStack(spacing: 8) {
                 Button { changeRow(-1) } label: {
-                    Image(systemName: "minus").frame(width: 52, height: 48)
+                    Image(lucide: "minus").frame(width: 52, height: 48)
                 }
                 .buttonStyle(PressStyle(bg: Theme.surface2, fg: Theme.text, radius: 16))
                 .accessibilityLabel("1단 빼기")
@@ -309,8 +309,8 @@ struct CounterView: View {
     private var tapButtons: some View {
         HStack(spacing: 12) {
             Button { changeRow(-1) } label: {
-                Image(systemName: "minus")
-                    .font(.system(size: 30))
+                Image(lucide: "minus")
+                    .iconSize(36)
                     .frame(width: 96, height: 128)
             }
             .buttonStyle(PressStyle(bg: Theme.surface2, fg: Theme.text))
@@ -336,7 +336,7 @@ struct CounterView: View {
                 Haptics.light()
                 toast.show("되돌렸어요")
             } label: {
-                Label("되돌리기", systemImage: "arrow.uturn.backward")
+                Label("되돌리기", lucide: "arrow.uturn.backward")
             }
             .disabled(!store.canUndo(projectID))
 
@@ -351,7 +351,7 @@ struct CounterView: View {
 
     private func alertBox(row: Int, hits: [ReminderHit]) -> some View {
         HStack(alignment: .top, spacing: 12) {
-            Image(systemName: "bell.fill").padding(.top, 2)
+            Image(lucide: "bell.fill").padding(.top, 2)
             VStack(alignment: .leading, spacing: 4) {
                 Text("\(row)단에서 할 일").appFont(.headline)
                 ForEach(hits) { h in
@@ -371,7 +371,7 @@ struct CounterView: View {
         VStack(alignment: .leading, spacing: 10) {
             SectionHeader(title: "반복 알림") {
                 Button { showEdit = true } label: {
-                    if p.reminders.isEmpty { Label("추가", systemImage: "plus") } else { Text("편집") }
+                    if p.reminders.isEmpty { Label("추가", lucide: "plus") } else { Text("편집") }
                 }
                 .buttonStyle(ChipStyle())
             }
@@ -386,7 +386,7 @@ struct CounterView: View {
     private func countersSection(_ p: Project) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionHeader(title: "보조 카운터") {
-                Button { addingCounter = true } label: { Label("추가", systemImage: "plus") }
+                Button { addingCounter = true } label: { Label("추가", lucide: "plus") }
                     .buttonStyle(ChipStyle())
             }
             if p.counters.isEmpty {
@@ -432,7 +432,7 @@ struct CounterView: View {
     private func pausedBanner(_ p: Project) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
-                Image(systemName: "pause.circle")
+                Image(lucide: "pause.circle")
                 Text("잠시 멈춘 작품이에요").appFont(.headline)
                 Spacer(minLength: 0)
                 if let d = p.pausedDate {
@@ -451,7 +451,7 @@ struct CounterView: View {
                 Haptics.success()
                 toast.show("다시 시작해요!")
             } label: {
-                Label("다시 시작", systemImage: "play.fill")
+                Label("다시 시작", lucide: "play.fill")
                     .appFont(.body)
                     .padding(.horizontal, 18)
                     .padding(.vertical, 10)
@@ -469,7 +469,7 @@ struct CounterView: View {
                 Button {
                     changeText = ""
                     showAddChange = true
-                } label: { Label("추가", systemImage: "plus") }
+                } label: { Label("추가", lucide: "plus") }
                 .buttonStyle(ChipStyle())
             }
             if p.changes.isEmpty {
@@ -487,7 +487,7 @@ struct CounterView: View {
                         Button {
                             store.deleteChange(projectID, changeID: c.id)
                         } label: {
-                            Image(systemName: "trash").frame(width: 32, height: 32)
+                            Image(lucide: "trash").frame(width: 32, height: 32)
                         }
                         .foregroundStyle(Theme.muted)
                         .accessibilityLabel("이 변경 기록 삭제")
@@ -508,7 +508,7 @@ struct CounterView: View {
                     pauseNote = p.resumeNote
                     showPause = true
                 } label: {
-                    Label("잠시 멈춤", systemImage: "pause")
+                    Label("잠시 멈춤", lucide: "pause")
                         .appFont(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(15)
@@ -536,7 +536,7 @@ struct CounterView: View {
             }
         } label: {
             Label(p.isDone ? "진행 중으로 되돌리기" : "완성으로 표시",
-                  systemImage: p.isDone ? "arrow.uturn.backward" : "checkmark")
+                  lucide: p.isDone ? "arrow.uturn.backward" : "checkmark")
                 .appFont(.headline)
                 .frame(maxWidth: .infinity)
                 .padding(15)
@@ -617,14 +617,14 @@ struct CounterView: View {
             if p.pattern?.kind == .pdf {
                 Button { readGuide(auto: false) } label: {
                     HStack(spacing: 8) {
-                        if readingGuide { ProgressView().controlSize(.small) } else { Image(systemName: "doc.text.viewfinder") }
+                        if readingGuide { ProgressView().controlSize(.small) } else { Image(lucide: "doc.text.viewfinder") }
                         Text(readingGuide ? "도안 읽는 중…" : "도안에서 단 읽기")
                     }
                 }
                 .disabled(readingGuide)
             }
             Button { guideDraft = GuideDraft(result: GuideParser.Result(), editing: true, manual: true) } label: {
-                Label(p.pattern?.kind == .pdf ? "직접 입력" : "단별 안내 직접 입력", systemImage: "square.and.pencil")
+                Label(p.pattern?.kind == .pdf ? "직접 입력" : "단별 안내 직접 입력", lucide: "square.and.pencil")
             }
         }
         .buttonStyle(ChipStyle())
@@ -696,7 +696,7 @@ struct CounterRow: View {
                 HStack(spacing: 6) {
                     Text(counter.name).appFont(.body)
                     if counter.linked {
-                        Label("단 연동", systemImage: "link")
+                        Label("단 연동", lucide: "link")
                             .appFont(.caption2)
                             .foregroundStyle(Theme.sage)
                             .padding(.horizontal, 8)
@@ -723,7 +723,7 @@ struct CounterRow: View {
                 roundButton("plus", label: "\(counter.name) 1 더하기", bg: Theme.accentSoft, fg: Theme.accentText) { onChange(1) }
             }
             Button(action: onEdit) {
-                Image(systemName: "ellipsis")
+                Image(lucide: "ellipsis")
                     .frame(width: 38, height: 38)
                     .contentShape(Rectangle())
             }
@@ -736,8 +736,8 @@ struct CounterRow: View {
 
     private func roundButton(_ symbol: String, label: String, bg: Color, fg: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Image(systemName: symbol)
-                .font(.system(size: 18))
+            Image(lucide: symbol)
+                .iconSize(22)
                 .frame(width: 48, height: 48)
         }
         .buttonStyle(PressStyle(bg: bg, fg: fg, radius: 24))
@@ -767,7 +767,7 @@ struct SequenceCounterCard: View {
                     .disabled(counter.isFinished)
                     .accessibilityHint("남은 단계를 건너뛰고 이번 반복을 끝내요")
                 Button(action: onEdit) {
-                    Image(systemName: "ellipsis").frame(width: 32, height: 28).contentShape(Rectangle())
+                    Image(lucide: "ellipsis").frame(width: 32, height: 28).contentShape(Rectangle())
                 }
                 .foregroundStyle(Theme.muted)
                 .accessibilityLabel("\(counter.name) 설정")
@@ -775,7 +775,7 @@ struct SequenceCounterCard: View {
 
             if counter.isFinished {
                 VStack(alignment: .leading, spacing: 4) {
-                    Label("\(counter.max)번 반복 완료", systemImage: "checkmark.circle.fill")
+                    Label("\(counter.max)번 반복 완료", lucide: "checkmark.circle.fill")
                         .appFont(size: 22, relativeTo: .title3)
                         .foregroundStyle(Theme.sage)
                     Text("다음을 누르면 처음부터 다시 세요").appFont(.caption).foregroundStyle(Theme.muted)
@@ -809,14 +809,14 @@ struct SequenceCounterCard: View {
 
             HStack(spacing: 8) {
                 Button { onMove(-1, false) } label: {
-                    Image(systemName: "arrow.uturn.backward").frame(width: 52, height: 52)
+                    Image(lucide: "arrow.uturn.backward").frame(width: 52, height: 52)
                 }
                 .buttonStyle(PressStyle(bg: Theme.surface2, fg: Theme.text, radius: 16))
                 .disabled(counter.value == 0 && counter.step == 0)
                 .accessibilityLabel("한 단계 뒤로")
 
                 Button { onMove(1, false) } label: {
-                    Label(counter.isFinished ? "처음부터" : "다음 단계", systemImage: counter.isFinished ? "arrow.counterclockwise" : "chevron.right")
+                    Label(counter.isFinished ? "처음부터" : "다음 단계", lucide: counter.isFinished ? "arrow.counterclockwise" : "chevron.right")
                         .labelStyle(TrailingIconLabelStyle())
                         .appFont(.headline)
                         .frame(maxWidth: .infinity)

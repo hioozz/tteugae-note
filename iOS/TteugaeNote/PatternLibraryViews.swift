@@ -35,7 +35,7 @@ struct PatternLibraryView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("닫기") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button { editing = SavedPattern() } label: { Label("도안 추가", systemImage: "plus") }
+                    Button { editing = SavedPattern() } label: { Label("도안 추가", lucide: "plus") }
                 }
             }
             .sheet(item: $editing) { SavedPatternSheet(pattern: $0, onStart: { start($0) }) }
@@ -75,8 +75,8 @@ struct SavedPatternCard: View {
         VStack(alignment: .leading, spacing: 10) {
             Button(action: onOpen) {
                 HStack(alignment: .top, spacing: 12) {
-                    Image(systemName: pattern.file?.kind == .web ? "globe" : "doc.richtext")
-                        .font(.system(size: 20))
+                    Image(lucide: pattern.file?.kind == .web ? "globe" : "doc.richtext")
+                        .iconSize(24)
                         .foregroundStyle(Theme.accentText)
                         .frame(width: 44, height: 44)
                         .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -97,7 +97,7 @@ struct SavedPatternCard: View {
             .buttonStyle(.plain)
 
             Button(action: onStart) {
-                Label("이 도안으로 작품 시작", systemImage: "play.fill")
+                Label("이 도안으로 작품 시작", lucide: "play.fill")
                     .labelStyle(TrailingIconLabelStyle())
                     .appFont(.headline)
                     .frame(maxWidth: .infinity)
@@ -148,20 +148,19 @@ struct SavedPatternSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
+            AppForm {
                 fileSection
-                Section("도안") {
-                    TextField("도안 이름 (예: 푸딩 줄 감개)", text: $draft.name)
-                    TextField("실 (선택)", text: $draft.yarn)
-                    TextField("바늘 (선택, 예: 6호)", text: $draft.needle)
+                FormSection(title: "도안") {
+                    AppTextField("도안 이름 (예: 푸딩 줄 감개)", text: $draft.name)
+                    AppTextField("실 (선택)", text: $draft.yarn)
+                    AppTextField("바늘 (선택, 예: 6호)", text: $draft.needle)
                 }
                 guideSection
-                Section("메모") {
-                    TextField("작품을 시작할 때 메모로 들어가요", text: $draft.notes, axis: .vertical)
-                        .lineLimit(2...6)
+                FormSection(title: "메모") {
+                    AppTextField("작품을 시작할 때 메모로 들어가요", text: $draft.notes, lines: 2...6)
                 }
                 if !isNew {
-                    Section { Button("도안함에서 삭제", role: .destructive) { confirmDelete = true } }
+                    DangerButton(title: "도안함에서 삭제") { confirmDelete = true }
                 }
             }
             .navigationTitle(isNew ? "도안 추가" : "도안")
@@ -182,7 +181,7 @@ struct SavedPatternSheet: View {
                             onStart?(saved)
                         }
                     } label: {
-                        Label("이 도안으로 작품 시작", systemImage: "play.fill")
+                        Label("이 도안으로 작품 시작", lucide: "play.fill")
                             .labelStyle(TrailingIconLabelStyle())
                             .appFont(.headline)
                             .frame(maxWidth: .infinity)
@@ -192,7 +191,7 @@ struct SavedPatternSheet: View {
                     .padding(.horizontal, 16)
                     .padding(.top, 10)
                     .padding(.bottom, 8)
-                    .background(Color(UIColor.systemGroupedBackground))
+                    .background(Theme.bg)
                 }
             }
             .fileImporter(isPresented: $showImporter, allowedContentTypes: [.pdf, .image]) { result in
@@ -241,71 +240,59 @@ struct SavedPatternSheet: View {
     // MARK: 칸
 
     private var fileSection: some View {
-        Section {
+        FormSection(title: "도안 파일") {
+            if draft.file != nil {
+                HStack(spacing: 14) {
+                    Menu("바꾸기") {
+                        Button { showImporter = true } label: { Label("파일(PDF·이미지)", lucide: "doc.badge.plus") }
+                        PhotosPicker(selection: $photoItem, matching: .images) { Label("사진", lucide: "photo") }
+                        Button { webInput = draft.file?.url ?? ""; showWeb = true } label: { Label("웹 링크", lucide: "link") }
+                    }
+                    .foregroundStyle(Theme.accentText)
+                    Button("삭제") { draft.file = nil }
+                        .foregroundStyle(Theme.danger)
+                }
+            }
+        } content: {
             if let f = draft.file {
                 HStack(spacing: 12) {
-                    Image(systemName: f.kind == .pdf ? "doc.richtext" : "globe")
-                        .font(.system(size: 18))
+                    Image(lucide: f.kind == .pdf ? "doc.richtext" : "globe")
+                        .iconSize(22)
                         .foregroundStyle(Theme.accentText)
                         .frame(width: 40, height: 40)
                         .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(f.title).lineLimit(1)
+                        Text(f.title).appFont(.body).lineLimit(1)
                         Text(f.kind == .pdf ? "PDF·사진 도안" : (f.url ?? "")).appFont(.caption).foregroundStyle(Theme.muted).lineLimit(1)
                     }
                 }
             } else {
                 HStack(spacing: 8) {
-                    Button { showImporter = true } label: { Label("파일", systemImage: "doc.badge.plus") }
-                    PhotosPicker(selection: $photoItem, matching: .images) { Label("사진", systemImage: "photo") }
-                    Button { webInput = ""; showWeb = true } label: { Label("웹 링크", systemImage: "link") }
+                    Button { showImporter = true } label: { Label("파일", lucide: "doc.badge.plus") }
+                    PhotosPicker(selection: $photoItem, matching: .images) { Label("사진", lucide: "photo") }
+                    Button { webInput = ""; showWeb = true } label: { Label("웹 링크", lucide: "link") }
                 }
                 .buttonStyle(ChipStyle())
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
-            }
-        } header: {
-            HStack {
-                Text("도안 파일")
-                Spacer()
-                if draft.file != nil {
-                    HStack(spacing: 14) {
-                        Menu("바꾸기") {
-                            Button { showImporter = true } label: { Label("파일(PDF·이미지)", systemImage: "doc.badge.plus") }
-                            PhotosPicker(selection: $photoItem, matching: .images) { Label("사진", systemImage: "photo") }
-                            Button { webInput = draft.file?.url ?? ""; showWeb = true } label: { Label("웹 링크", systemImage: "link") }
-                        }
-                        Button("삭제", role: .destructive) { draft.file = nil }
-                            .foregroundStyle(Theme.danger)
-                    }
-                    .appFont(.subheadline)
-                    .textCase(nil)
-                }
             }
         }
     }
 
     private var guideSection: some View {
-        Section {
-            TextField("", text: $guideText,
-                      prompt: Text(verbatim: "1단: 사슬5, 기둥코2, 짧은뜨기1*4 (총5)\n2단: 사슬2, 짧은뜨기1, 짧은뜨기 늘려\n3~10단: 사슬2, 짧은뜨기1*5"),
-                      axis: .vertical)
-                .lineLimit(4...14)
+        FormSection(title: "단별 안내 (선택)", footer: readMessage ?? guideFooter) {
+            AppTextField("1단: 사슬5, 기둥코2, 짧은뜨기1*4 (총5)\n2단: 사슬2, 짧은뜨기1, 짧은뜨기 늘려\n3~10단: 사슬2, 짧은뜨기1*5",
+                         text: $guideText, lines: 4...14)
             if draft.file?.kind == .pdf {
                 Button {
                     readFromFile()
                 } label: {
                     HStack(spacing: 8) {
-                        if reading { ProgressView().controlSize(.small) } else { Image(systemName: "doc.text.viewfinder") }
+                        if reading { ProgressView().controlSize(.small) } else { Image(lucide: "doc.text.viewfinder") }
                         Text(reading ? "도안 읽는 중…" : "도안에서 단 읽기")
                     }
                 }
+                .buttonStyle(ChipStyle())
                 .disabled(reading)
             }
-        } header: {
-            Text("단별 안내 (선택)")
-        } footer: {
-            Text(verbatim: readMessage ?? guideFooter)
         }
     }
 
